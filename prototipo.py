@@ -3,30 +3,22 @@ from tkinter import filedialog
 from openpyxl import Workbook
 import os
 import re
+import pytz
 import csv
 import PyPDF2
+import pandas as pd
 from datetime import datetime
 
-TELsValidos = [] #Lista com as páginas ordenadas dos telegramas de caráter Ostensivo e Reservado, desconsiderando os Secretos.
-
-#Parte inicial do programa, recebe o PDF e extrai o texto das páginas.
-try:
-    #diretorio = filedialog.askopenfilename(title="Selecione um arquivo PDF", filetypes=[("Arquivos PDF", "*.pdf")])
-    diretorio = "C:/Users/eduardo.p.sousa/Downloads/TELDODIAT.pdf"
-    with open(diretorio, 'rb') as arquivoPdf:
-        leitor = PyPDF2.PdfReader(arquivoPdf)
-        textoPdf = ""
-        for pagina in leitor.pages:
-            textoPdf += pagina.extract_text()
-            textosPdf = textoPdf.split("\n") #Separação da página por quebra de linhas
-            if ("Para:" in textosPdf[1]) or ("CARAT=Secreto" in textosPdf[2]) or ('Distribuído' not in textoPdf):
-                pass
-            else:
-                TELsValidos.append(pagina.extract_text())
-            textoPdf = ""
-except Exception as e:
-    print(f"Erro ao ler o PDF: {e}")
-arquivoPdf.close()
+def gerarCsv(nome_arquivo, dados):
+    try:
+        with open(nome_arquivo+".csv", mode='w', newline='', encoding='utf-8-sig') as arquivo_csv:
+            escritor = csv.writer(arquivo_csv)
+            escritor.writerow(["data_hora_entrada", "data_documento", "tipo_documento", "numero", "ano", "remetente", "documento", "indice", "prioridade", "carater", "distribuicao", "primdistribuicao", "redistribuicao", "refdoc", "processos_sei", "teor", "corpo", "resumo", "paises_ois", "pasta", "apenas_cumpre_instrucoes"])
+            escritor.writerows(dados)
+            caminhoCsv = os.path.abspath(nome_arquivo+".csv")
+        print(f"Arquivo CSV criado em: {caminhoCsv}")
+    except Exception as e:
+        print(f"Erro ao criar o arquivo CSV: {e}")
 
 def gerarExcel(nome_arquivo, dados):
     try:
@@ -55,44 +47,71 @@ def gerarTxt(textoPdf):
         print(f"Texto salvo em: {caminhoTxt}")
     except Exception as e:
         print(f"Erro ao salvar o arquivo .txt: {e}")
-
-#Segunda parte do programa, separa os telegramas válidos por grupos de página.
-TEL = []
-Dados = []
-for pagina in TELsValidos:
-    numero_pagina = (((pagina.split("\n"))[0]).split(" "))
-    numero_pagina = numero_pagina[1]
-    texto_Tel = ""
-    #Utiliza padrões de regex para extrair as informações das páginas.
-    if int(numero_pagina[0])//int(numero_pagina[2]) == 1:
-        TEL.append(pagina)
-        for i in range(len(TEL)):
-            if i == 0:
-                matchDistr = re.search(r'DISTR=([A-Za-z/]+)', TEL[i])
-                if not matchDistr.group(1).startswith("DPAGRO"):
-                    break
-                DISTR = matchDistr.group(1) #CHECK
-                matchRemetenteData = re.search(r"De (.*?) para Exteriores em (\d{2}/\d{2}/\d{4})", TEL[i])
-                Remetente = matchRemetenteData.group(1)     #CHECK
-                DataExpedicao = matchRemetenteData.group(2) #CHECK
-                matchNumTel = re.search(r"De: .*? Recebido em: (\d{2}/\d{2}/\d{4}) (\d{2}:\d{2}:\d{2}) N.°: (\d{5})", TEL[i])
-                DataRecebimento = matchNumTel.group(1) #CHECK
-                HoraEntrada = matchNumTel.group(2) #CHECK
-                NumTel = matchNumTel.group(3) #CHECK
-                matchCarat = re.search(r'CARAT=([A-Za-z]+)', TEL[i])
-                matchPrior = re.search(r'PRIOR=([A-Za-z]+)', TEL[i])
-                CARAT = matchCarat.group(1) #CHECK
-                PRIOR = matchPrior.group(1) #CHECK
-                PRIMDISTR = "DPAGRO"
-                #data = datetime.strptime(data_string, "%d-%m-%Y %H:%M:%S") não está pronto
-                Dados.append([DataRecebimento, DataExpedicao, "TEL", NumTel, "2024", Remetente, "documento", "indice", PRIOR, CARAT, DISTR, PRIMDISTR,"redistribuicao", "refdoc", "processos_sei", "teor", "corpo","resumo","paises_ois","pasta","apenas_cumpre_instrucoes"])
         
-        #Começar as operações com o telegrama
-        TEL.clear()
-    elif int(numero_pagina[0])//int(numero_pagina[2]) != 1:
-        TEL.append(pagina)
-gerarExcel("TELDODIAM", Dados)
+def Extracao():
+    TELsValidos = [] #Lista com as páginas ordenadas dos telegramas de caráter Ostensivo e Reservado, desconsiderando os Secretos.
+    #Parte inicial do programa, recebe o PDF e extrai o texto das páginas.
+    try:
+        #diretorio = filedialog.askopenfilename(title="Selecione um arquivo PDF", filetypes=[("Arquivos PDF", "*.pdf")])
+        diretorio = "C:/Users/eduardo.p.sousa/Downloads/TELDODIAT.pdf"
+        with open(diretorio, 'rb') as arquivoPdf:
+            leitor = PyPDF2.PdfReader(arquivoPdf)
+            textoPdf = ""
+            for pagina in leitor.pages:
+                textoPdf += pagina.extract_text()
+                textosPdf = textoPdf.split("\n") #Separação da página por quebra de linhas
+                if ("Para:" in textosPdf[1]) or ("CARAT=Secreto" in textosPdf[2]) or ('Distribuído' not in textoPdf):
+                    pass
+                else:
+                    TELsValidos.append(pagina.extract_text())
+                textoPdf = ""
+    except Exception as e:
+        print(f"Erro ao ler o PDF: {e}")
+    arquivoPdf.close()
 
+    #Segunda parte do programa, separa os telegramas válidos por grupos de página.
+    TEL = []
+    Dados = []
+    for pagina in TELsValidos:
+        numero_pagina = (((pagina.split("\n"))[0]).split(" "))
+        numero_pagina = numero_pagina[1]
+        texto_Tel = ""
+        #Utiliza padrões de regex para extrair as informações das páginas.
+        if int(numero_pagina[0])//int(numero_pagina[2]) == 1:
+            TEL.append(pagina)
+            for i in range(len(TEL)):
+                if i == 0:
+                    matchDistr = re.search(r'DISTR=([A-Za-z/]+)', TEL[i])
+                    if not matchDistr.group(1).startswith("DPAGRO") and not matchDistr.group(1).startswith("DPAgro"):
+                        break
+                    DISTR = matchDistr.group(1) #CHECK
+                    #matchRedistribuicao = 
+                    matchRemetenteData = re.search(r"De (.*?) para Exteriores em (\d{2}/\d{2}/\d{4})", TEL[i])
+                    Remetente = matchRemetenteData.group(1)     #CHECK
+                    DataExpedicao = matchRemetenteData.group(2) #CHECK
+                    matchNumTel = re.search(r"De: .*? Recebido em: (\d{2}/\d{2}/\d{4}) (\d{2}:\d{2}:\d{2}) N.°: (\d{5})", TEL[i])
+                    DataRecebimento = matchNumTel.group(1) #CHECK
+                    HoraEntrada = matchNumTel.group(2) #CHECK
+                    NumTel = int(matchNumTel.group(3)) #CHECK
+                    matchCarat = re.search(r'CARAT=([A-Za-z]+)', TEL[i])
+                    matchPrior = re.search(r'PRIOR=([A-Za-z]+)', TEL[i])
+                    indice = (re.findall('//([\s\S]*?)//', TEL[i]))[0].replace("\n", " ")
+                    CARAT = matchCarat.group(1) #CHECK
+                    PRIOR = matchPrior.group(1) #CHECK
+                    PRIMDISTR = "DPAGRO"
+                    DataHora = datetime.strptime(f"{DataRecebimento} {HoraEntrada}", "%d/%m/%Y %H:%M:%S") #CHECK
+                    Data = datetime.strptime(DataExpedicao, "%d/%m/%Y") #CHECK
+                    Ano = Data.year #CHECK
+                    Documento = f"TEL {NumTel}/{Ano}/{Remetente}" #CHECK
+                    Dados.append([DataHora, Data.date(), "TEL", NumTel, Ano, Remetente, Documento, indice, PRIOR, CARAT, DISTR, PRIMDISTR, "redistribuicao", "refdoc", "processos_sei", "teor", "corpo","resumo","paises_ois","pasta","apenas_cumpre_instrucoes"])
+                    #gerarTxt(TEL)
+            #Começar as operações com o telegrama
+            TEL.clear()
+        elif int(numero_pagina[0])//int(numero_pagina[2]) != 1:
+            TEL.append(pagina)
+    gerarExcel("TELDODIAM", Dados)
+
+Extracao()
 '''
 #Função utilizada para gerar o Csv utilizando os dados em formato de lista aninhada.
 def gerarCsv(nome_arquivo, dados):
