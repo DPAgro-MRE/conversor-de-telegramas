@@ -8,11 +8,14 @@ from tkinter import filedialog, Menu
 from PIL import Image, ImageTk
 
 app = ctk.CTk()
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
 #Definição referente à base do aplicativo
 app.title("Leitor de Telegramas")
 app.geometry("925x649")
 app.resizable(False, False)
+
+filename = ''
 
 # Funções para o menu
 # Ajuda
@@ -23,8 +26,8 @@ def show_help():
     help_window.resizable(False, False)  # Tamanho fixo
 
     help_label = ctk.CTkLabel(help_window, 
-                              text="Esta é a janela de ajuda.\nAqui você pode adicionar informações relevantes.", 
-                              font=("Arial", 14), 
+                              text="Este é um programa de tratamento de telegramas recebidos \n para a inserção no Portal DPAgro.\n \n Mais informações acessar:\n https://github.com/DPAgro-MRE/conversor-de-telegramas", 
+                              font=("Lato", 14), 
                               justify="center")
     help_label.pack(pady=20)
 
@@ -39,22 +42,31 @@ def show_about():
     help_window.resizable(False, False)  # Tamanho fixo
 
     help_label = ctk.CTkLabel(help_window, 
-                              text="Esta é a janela de ajuda.\nAqui você pode adicionar informações relevantes.", 
-                              font=("Arial", 14), 
+                              text="Conversor de telegramas \n Desenvolvido pela Divisão de Política Agrícola (DPAgro)\n \n Link do repositório github:\nhttps://github.com/DPAgro-MRE/conversor-de-telegramas"
+                              , 
+                              font=("Lato", 14), 
                               justify="center")
     help_label.pack(pady=20)
 
     close_button = ctk.CTkButton(help_window, text="Fechar", command=help_window.destroy)
     close_button.pack(pady=10)
 
+
 def select_pdf():
+    global filename
     filepath = filedialog.askopenfilename(
         initialdir=os.path.expanduser("~/Downloads"),
         title="Selecione um arquivo PDF",
         filetypes=[("Arquivos PDF", "*.pdf")]
+        
     )
+    filename = filepath.split("/")[-1]
     if filepath:
-        print(f"PDF selecionado {filepath}")
+        print(f"PDF selecionado {filename}")
+        #print(filename)
+        pdf_label = ctk.CTkLabel(app, text=filename, font=("Lato", 15))
+        pdf_label.place(x=324, y=322)
+    return filename
 
 def button_callback():
     print("Testando")
@@ -89,20 +101,25 @@ container_frame = ctk.CTkFrame(app, width=1516, height=488, corner_radius=10)
 container_frame.place(relx=0.5, rely=0.5, anchor="center",)
 container_frame.propagate(True)
 '''
+#Header
+header_path = os.path.join(current_dir, "header-dpagro.png")
 
-# Título central
-title_label = ctk.CTkLabel(app, text="Conversor de Telegramas", font=("Lato", 32, "bold"))
-#title_label.pack(side="top",pady=(10,0))
-title_label.place(x=284, y=97)
+try:
+    if not os.path.isfile(header_path):
+        raise FileNotFoundError(f"Header não encontrada no caminho: {header_path}")
 
-# Subtitulo central
-selection_label = ctk.CTkLabel(app, text="Selecione o arquivo pdf para a conversão", font=("Lato", 15, "bold"))
-selection_label.place(x=277, y=198)
+    header_image = Image.open(header_path)
+    header_resized = header_image.resize((925, 76))
+    header_tk = ImageTk.PhotoImage(header_resized)
+    header_label = ctk.CTkLabel(app, image=header_tk, text="")
+    header_label.place(x=0, y=0)
+
+except FileNotFoundError as e:
+    print(e)
 
 #Definição e configurações da logo
 
 # Configurar caminho da logo
-current_dir = os.path.dirname(os.path.abspath(__file__))
 logo_path = os.path.join(current_dir,"logo-portal-dpagro.png")
 
 try:
@@ -113,11 +130,72 @@ try:
     logo_resized = logo_image.resize((242, 63))
     logo_tk = ImageTk.PhotoImage(logo_resized)
     
-    logo_label = ctk.CTkLabel(app, image=logo_tk, text="")
-    logo_label.place(x=35, y=25 )
+    logo_label = ctk.CTkLabel(app, image=logo_tk, text="", bg_color="#16214A")
+    logo_label.place(x=38, y=6 )
 
 except FileNotFoundError as e:
     print(e)
+
+# Título central
+title_label = ctk.CTkLabel(app, text="Conversor de Telegramas", font=("Lato", 40, "bold"))
+#title_label.pack(side="top",pady=(10,0))
+title_label.place(x=236, y=88)
+
+# Subtitulo central
+selection_label = ctk.CTkLabel(app, text="Selecione o arquivo pdf para a conversão", font=("Lato", 20, "bold"))
+selection_label.place(x=273, y=190)
+
+# Icon do pdf
+pdf_icon = os.path.join(current_dir, "pdf-icon.png")
+
+try:
+    if not os.path.isfile(pdf_icon):
+        raise FileNotFoundError(f"Icone PDF não encontrado no caminho: {pdf_icon}")
+    pdf_image = Image.open(pdf_icon)
+    pdf_resized = pdf_image.resize((88, 88))
+    pdf_tk = ImageTk.PhotoImage(pdf_resized)
+
+    pdf_label = ctk.CTkLabel(app, image=pdf_tk, text="")
+    pdf_label.place(x=309, y=233)
+
+except FileNotFoundError as e:
+    print(e)
+
+button = ctk.CTkButton(app, text="Buscar", width=183, height=44, font=('Lato', 16, 'bold') ,command=select_pdf)
+button.grid(row=0, column=0, padx=50, pady=50)
+button.place(x=418, y=255)
+
+
+# Nome do usuário
+user_name = os.getlogin()
+formated_name = user_name[0].upper() + user_name[1:]
+print(formated_name)
+user_label = ctk.CTkLabel(app, text=formated_name, font=("Lato", 20, "bold"), bg_color="#16214A")
+user_label.place(x=688, y=15)
+
+
+#Escolha de formatos
+format_title = ctk.CTkLabel(app, text="Selecione o formato de arquivo desejado", font=("Lato", 20, "normal"))
+#title_label.pack(side="top",pady=(10,0))
+format_title.place(x=273, y=397)
+
+#XLSX
+checkbox_xlsx = ctk.CTkCheckBox(app, text=".xlsx", command=ensure_one_selected, font=("Lato", 15, "normal"))
+checkbox_xlsx.grid(pady=5)
+checkbox_xlsx.select()
+checkbox_xlsx.place(x=347, y=447)
+
+#CSV
+checkbox_csv = ctk.CTkCheckBox(app, text=".csv",command=ensure_one_selected, font=("Lato", 15, "normal"))
+checkbox_csv.grid(pady=5)
+checkbox_csv.select()
+checkbox_csv.place(x=486, y=447)
+
+# Botão de conversão
+button = ctk.CTkButton(app, text="Converter", width=183, height=44, font=('Lato', 24, "bold") ,command=button_callback)
+button.grid(row=0, column=0, padx=50, pady=50)
+button.place(x=367, y=515)
+
 '''
 #Definições e configurações de widgets
 button = ctk.CTkButton(center_frame, text="Teste", width=183, height=44, font=('Lato', 80) ,command=button_callback)
