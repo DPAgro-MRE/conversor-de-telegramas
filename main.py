@@ -15,6 +15,8 @@ app.title("Leitor de Telegramas")
 app.geometry("925x649")
 app.resizable(False, False)
 
+filename = ''
+
 # Funções para o menu
 # Ajuda
 def show_help():
@@ -59,8 +61,10 @@ def select_pdf():
     )
     filename = filepath.split("/")[-1]
     if filepath:
-        print(f"PDF selecionado {filepath}")
+        print(f"PDF selecionado {filename}")
         #print(filename)
+        pdf_label = ctk.CTkLabel(app, text=filename, font=("Lato", 15))
+        pdf_label.place(x=324, y=322)
     return filename
 
 def button_callback():
@@ -160,9 +164,6 @@ button = ctk.CTkButton(app, text="Buscar", width=183, height=44, font=('Lato', 1
 button.grid(row=0, column=0, padx=50, pady=50)
 button.place(x=418, y=255)
 
-# Nome do PDF obtido
-pdf_label = ctk.CTkLabel(app, text="filename", font=("Lato", 15))
-pdf_label.place(x=324, y=322)
 
 # Nome do usuário
 user_name = os.getlogin()
@@ -171,6 +172,28 @@ print(formated_name)
 user_label = ctk.CTkLabel(app, text=formated_name, font=("Lato", 20, "bold"), bg_color="#16214A")
 user_label.place(x=688, y=15)
 
+
+#Escolha de formatos
+format_title = ctk.CTkLabel(app, text="Selecione o formato de arquivo desejado", font=("Lato", 20, "normal"))
+#title_label.pack(side="top",pady=(10,0))
+format_title.place(x=273, y=397)
+
+#XLSX
+checkbox_xlsx = ctk.CTkCheckBox(app, text=".xlsx", command=ensure_one_selected, font=("Lato", 15, "normal"))
+checkbox_xlsx.grid(pady=5)
+checkbox_xlsx.select()
+checkbox_xlsx.place(x=347, y=447)
+
+#CSV
+checkbox_csv = ctk.CTkCheckBox(app, text=".csv",command=ensure_one_selected, font=("Lato", 15, "normal"))
+checkbox_csv.grid(pady=5)
+checkbox_csv.select()
+checkbox_csv.place(x=486, y=447)
+
+# Botão de conversão
+button = ctk.CTkButton(app, text="Converter", width=183, height=44, font=('Lato', 24, "bold") ,command=button_callback)
+button.grid(row=0, column=0, padx=50, pady=50)
+button.place(x=367, y=515)
 
 '''
 #Definições e configurações de widgets
