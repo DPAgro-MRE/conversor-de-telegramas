@@ -26,8 +26,8 @@ def show_help():
     help_window.resizable(False, False)  # Tamanho fixo
 
     help_label = ctk.CTkLabel(help_window, 
-                              text="Esta é a janela de ajuda.\nAqui você pode adicionar informações relevantes.", 
-                              font=("Arial", 14), 
+                              text="Este é um programa de tratamento de telegramas recebidos \n para a inserção no Portal DPAgro.\n \n Mais informações acessar:\n https://github.com/DPAgro-MRE/conversor-de-telegramas", 
+                              font=("Lato", 14), 
                               justify="center")
     help_label.pack(pady=20)
 
@@ -42,8 +42,9 @@ def show_about():
     help_window.resizable(False, False)  # Tamanho fixo
 
     help_label = ctk.CTkLabel(help_window, 
-                              text="Esta é a janela de ajuda.\nAqui você pode adicionar informações relevantes.", 
-                              font=("Arial", 14), 
+                              text="Conversor de telegramas \n Desenvolvido pela Divisão de Política Agrícola (DPAgro)\n \n Link do repositório github:\nhttps://github.com/DPAgro-MRE/conversor-de-telegramas"
+                              , 
+                              font=("Lato", 14), 
                               justify="center")
     help_label.pack(pady=20)
 
