@@ -5,3 +5,7 @@ openpyxl==3.1.5
 packaging==24.2
 pillow==11.0.0
 PyPDF2==3.0.1
+pytz==2024.2
+pandas==2.2.3
+
+

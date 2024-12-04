@@ -13,7 +13,7 @@ def gerarCsv(nome_arquivo, dados):
     try:
         with open(nome_arquivo+".csv", mode='w', newline='', encoding='utf-8-sig') as arquivo_csv:
             escritor = csv.writer(arquivo_csv)
-            escritor.writerow(["data_hora_entrada", "data_documento", "tipo_documento", "numero", "ano", "remetente", "documento", "indice", "prioridade", "carater", "distribuicao", "primdistribuicao", "redistribuicao", "refdoc", "processos_sei", "teor", "corpo", "resumo", "paises_ois", "pasta", "apenas_cumpre_instrucoes"])
+            escritor.writerow(["data_hora_entrada", "data_documento", "tipo_documento", "numero", "ano", "remetente", "documento", "indice", "prioridade", "carater", "distribuicao", "primdistribuicao", "redistribuicao", "primredistribuicao", "refdoc", "processos_sei", "teor", "corpo", "resumo", "paises_ois", "pasta", "apenas_cumpre_instrucoes"])
             escritor.writerows(dados)
             caminhoCsv = os.path.abspath(nome_arquivo+".csv")
         print(f"Arquivo CSV criado em: {caminhoCsv}")
@@ -25,7 +25,7 @@ def gerarExcel(nome_arquivo, dados):
         workbook = Workbook()
         planilha = workbook.active
         planilha.title = "Coleção"
-        planilha.append(["data_hora_entrada", "data_documento", "tipo_documento", "numero", "ano", "remetente", "documento", "indice", "prioridade", "carater", "distribuicao", "primdistribuicao", "redistribuicao", "refdoc", "processos_sei", "teor", "corpo", "resumo", "paises_ois", "pasta", "apenas_cumpre_instrucoes"])
+        planilha.append(["data_hora_entrada", "data_documento", "tipo_documento", "numero", "ano", "remetente", "documento", "indice", "prioridade", "carater", "distribuicao", "primdistribuicao", "redistribuicao", "primredistribuicao", "refdoc", "processos_sei", "teor", "corpo", "resumo", "paises_ois", "pasta", "apenas_cumpre_instrucoes"])
         for linha in dados:
             planilha.append(linha)
         workbook.save(nome_arquivo+".xlsx")
@@ -34,7 +34,7 @@ def gerarExcel(nome_arquivo, dados):
     except Exception as e:
         print(f"Erro ao criar o arquivo Excel: {e}")
 
-def gerarTxt(textoPdf):
+def gerarTxt(textoPdf, NumTel):
     try:
         nome_arquivo_txt = (f"TEL{NumTel}.txt") 
         with open(nome_arquivo_txt, 'w', encoding='utf-8-sig') as arquivo_txt:
@@ -53,7 +53,7 @@ def Extracao():
     #Parte inicial do programa, recebe o PDF e extrai o texto das páginas.
     try:
         #diretorio = filedialog.askopenfilename(title="Selecione um arquivo PDF", filetypes=[("Arquivos PDF", "*.pdf")])
-        diretorio = "C:/Users/eduardo.p.sousa/Downloads/TELDODIAT.pdf"
+        diretorio = "C:/Users/eduardo.p.sousa/Downloads/TELDODIAT03122024.pdf"
         with open(diretorio, 'rb') as arquivoPdf:
             leitor = PyPDF2.PdfReader(arquivoPdf)
             textoPdf = ""
@@ -81,11 +81,17 @@ def Extracao():
             TEL.append(pagina)
             for i in range(len(TEL)):
                 if i == 0:
+                    matchRedistribuicao = re.search(r"Redistribuído para\s*(.*?)\s* em \d{2}/\d{2}/\d{4}", TEL[i]) 
+                    if matchRedistribuicao:
+                        Redistribuicao = matchRedistribuicao.group(1) #CHECK
+                        PrimRedistribuicao = Redistribuicao.split("/")[0]
+                    else:
+                        Redistribuicao = "NA"
+                        PrimRedistribuicao = "NA"
                     matchDistr = re.search(r'DISTR=([A-Za-z/]+)', TEL[i])
                     if not matchDistr.group(1).startswith("DPAGRO") and not matchDistr.group(1).startswith("DPAgro"):
                         break
                     DISTR = matchDistr.group(1) #CHECK
-                    #matchRedistribuicao = 
                     matchRemetenteData = re.search(r"De (.*?) para Exteriores em (\d{2}/\d{2}/\d{4})", TEL[i])
                     Remetente = matchRemetenteData.group(1)     #CHECK
                     DataExpedicao = matchRemetenteData.group(2) #CHECK
@@ -103,13 +109,17 @@ def Extracao():
                     Data = datetime.strptime(DataExpedicao, "%d/%m/%Y") #CHECK
                     Ano = Data.year #CHECK
                     Documento = f"TEL {NumTel}/{Ano}/{Remetente}" #CHECK
-                    Dados.append([DataHora, Data.date(), "TEL", NumTel, Ano, Remetente, Documento, indice, PRIOR, CARAT, DISTR, PRIMDISTR, "redistribuicao", "refdoc", "processos_sei", "teor", "corpo","resumo","paises_ois","pasta","apenas_cumpre_instrucoes"])
-                    #gerarTxt(TEL)
+                    matchInstrucoes = re.search(r"(cumpre |cumpri )(instrução|instruções)", TEL[i], re.IGNORECASE)
+                    if matchInstrucoes:
+                        Instrucoes = "Sim"
+                    else:
+                        Instrucoes = "Não"
+                    Dados.append([DataHora, Data.date(), "TEL", NumTel, Ano, Remetente, Documento, indice, PRIOR, CARAT, DISTR, PRIMDISTR, Redistribuicao, PrimRedistribuicao, "refdoc", "processos_sei", "teor", "corpo","resumo","paises_ois","pasta", Instrucoes])
             #Começar as operações com o telegrama
             TEL.clear()
         elif int(numero_pagina[0])//int(numero_pagina[2]) != 1:
             TEL.append(pagina)
-    gerarExcel("TELDODIAM", Dados)
+    gerarExcel("TELEGRAMAS", Dados)
 
 Extracao()
 '''
