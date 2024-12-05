@@ -52,8 +52,8 @@ def Extracao():
     TELsValidos = [] #Lista com as páginas ordenadas dos telegramas de caráter Ostensivo e Reservado, desconsiderando os Secretos.
     #Parte inicial do programa, recebe o PDF e extrai o texto das páginas.
     try:
-        #diretorio = filedialog.askopenfilename(title="Selecione um arquivo PDF", filetypes=[("Arquivos PDF", "*.pdf")])
-        diretorio = "C:/Users/eduardo.p.sousa/Downloads/TELDODIAT03122024.pdf"
+        diretorio = filedialog.askopenfilename(title="Selecione um arquivo PDF", filetypes=[("Arquivos PDF", "*.pdf")])
+        #diretorio = "C:/Users/eduardo.p.sousa/Downloads/TELDODIAT03122024.pdf"
         with open(diretorio, 'rb') as arquivoPdf:
             leitor = PyPDF2.PdfReader(arquivoPdf)
             textoPdf = ""
