@@ -4,11 +4,13 @@ Criação de uma GUI para o projeto
 """
 import customtkinter as ctk
 import os
-from tkinter import filedialog, Menu
+from tkinter import filedialog, Menu, messagebox
 from PIL import Image, ImageTk
+import prototipo as funcoes
 
 app = ctk.CTk()
 current_dir = os.path.dirname(os.path.abspath(__file__))
+ctk.set_appearance_mode("dark")
 
 #Definição referente à base do aplicativo
 app.title("Leitor de Telegramas")
@@ -16,6 +18,7 @@ app.geometry("925x649")
 app.resizable(False, False)
 
 filename = ''
+filepath = ''
 
 # Funções para o menu
 # Ajuda
@@ -54,22 +57,18 @@ def show_about():
 
 def select_pdf():
     global filename
+    global filepath
     filepath = filedialog.askopenfilename(
         initialdir=os.path.expanduser("~/Downloads"),
         title="Selecione um arquivo PDF",
         filetypes=[("Arquivos PDF", "*.pdf")]
-        
     )
     filename = filepath.split("/")[-1]
     if filepath:
         print(f"PDF selecionado {filename}")
-        #print(filename)
         pdf_label = ctk.CTkLabel(app, text=filename, font=("Lato", 15))
         pdf_label.place(x=324, y=322)
-    return filename
-
-def button_callback():
-    print("Testando")
+    return filepath
 
 def ensure_one_selected():
     if not checkbox_xlsx and not checkbox_csv:
@@ -167,9 +166,8 @@ button.place(x=418, y=255)
 
 
 # Nome do usuário
-user_name = os.getlogin()
-formated_name = user_name[0].upper() + user_name[1:]
-print(formated_name)
+user_name = os.getlogin().split(".")
+formated_name = f"{user_name[0].capitalize()} {user_name[len(user_name)-1].capitalize()}"
 user_label = ctk.CTkLabel(app, text=formated_name, font=("Lato", 20, "bold"), bg_color="#16214A")
 user_label.place(x=688, y=15)
 
@@ -192,7 +190,7 @@ checkbox_csv.select()
 checkbox_csv.place(x=486, y=447)
 
 # Botão de conversão
-button = ctk.CTkButton(app, text="Converter", width=183, height=44, font=('Lato', 24, "bold") ,command=button_callback)
+button = ctk.CTkButton(app, text="Converter", width=183, height=44, font=('Lato', 24, "bold") , command= lambda: (funcoes.Extracao(filepath, checkbox_csv.get(), checkbox_xlsx.get())))
 button.grid(row=0, column=0, padx=50, pady=50)
 button.place(x=367, y=515)
 
