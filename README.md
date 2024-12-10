@@ -1,5 +1,5 @@
 # Conversor de Telegramas
-> Programa de conversão de telegramas recebidos diariamente para a inserção na base de dados do Portal DPAgro
+Programa de conversão de telegramas recebidos no formato pdf para o formato csv e xlsx, com o intuito de adaptar e inserir os dados na base de dados relacional do Portal DPAgro.
 
 <div align="center">
   <img alt="Python" src="https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff&style=for-the-badge">
@@ -10,10 +10,12 @@
 </div>
 
 ## Descrição
-Este repositório foi criado com o intuito de realizar um processo automatizado para a rotina diária de recebimentos de dados.
-Este projeto é capaz de:
-- Receber informações obtidas através da leitura do PDF disponibilizado
-- Converter os resultados obtidos em arquivos .xlsx e .csv
+Este repositório foi criado com o propósito de manter a transparência nas atividades técnicas da Divisão de Política Agrícola, aderir ao conceito de **desenvolvimento comunitário** e melhorar o processo de revisão e manutenção de código.
+
+
+O sistema é capaz de:  
+a) processar as informações referentes a telegramas, obtidas através da leitura de arquivos no formato pdf;  
+b) disponibilizar os dados processados em um arquivo no formato xlsx e/ou csv.
 
 ## Dependências
 - [Custom TKinter](https://customtkinter.tomschimansky.com/)
