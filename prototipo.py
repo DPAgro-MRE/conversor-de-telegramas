@@ -51,10 +51,9 @@ def gerarTxt(textoPdf, NumTel):
         
 def Extracao(filepath, geraCsv, geraExcel):
     TELsValidos = [] #Lista com as páginas ordenadas dos telegramas de caráter Ostensivo e Reservado, desconsiderando os Secretos.
-
     #Parte inicial do programa, recebe o PDF e extrai o texto das páginas.
-    try:
         #filepath = "C:/Users/eduardo.p.sousa/Downloads/TELDODIAT03122024.pdf"
+    try:
         with open(filepath, 'rb') as arquivoPdf:
             leitor = PyPDF2.PdfReader(arquivoPdf)
             texto_pdf = ""
@@ -77,7 +76,17 @@ def Extracao(filepath, geraCsv, geraExcel):
         #Utiliza padrões de regex para extrair as informações das páginas.
         if int(numero_pagina[0])//int(numero_pagina[2]) == 1:
             TEL.append(pagina)
+            TEL2 = '\n'.join(TEL)
+            match_numero_tel = re.search(r"De: .*? Recebido em: (\d{2}/\d{2}/\d{4}) (\d{2}:\d{2}:\d{2}) N.°: (\d{5})", TEL2)
+            data_recebimento = match_numero_tel.group(1) #CHECK
+            hora_entrada = match_numero_tel.group(2) #CHECK
+            numero_tel = int(match_numero_tel.group(3)) #CHECK
+            for i in range(len(TEL)):
+                TEL[i] = TEL[i].splitlines()
+                TEL[i] = TEL[i][3:-1]
+                TEL[i] = "\n".join(TEL[i])
             TEL = '\n'.join(TEL)
+            Teor = TEL
             match_redistribuicao = re.search(r"Redistribuído para\s*(.*?)\s* em \d{2}/\d{2}/\d{4}", TEL) 
             if match_redistribuicao:
                 Redistribuicao = match_redistribuicao.group(1) #CHECK
@@ -100,10 +109,6 @@ def Extracao(filepath, geraCsv, geraExcel):
                 match_remetente_e_data = re.search(r"De (.*?) para Exteriores em (\d{2}/\d{2}/\d{4})", TEL)
                 Remetente = match_remetente_e_data.group(1)     #CHECK
                 data_expedicao = match_remetente_e_data.group(2) #CHECK
-                match_numero_tel = re.search(r"De: .*? Recebido em: (\d{2}/\d{2}/\d{4}) (\d{2}:\d{2}:\d{2}) N.°: (\d{5})", TEL)
-                data_recebimento = match_numero_tel.group(1) #CHECK
-                hora_entrada = match_numero_tel.group(2) #CHECK
-                numero_tel = int(match_numero_tel.group(3)) #CHECK
                 match_carater = re.search(r'CARAT=([A-Za-z]+)', TEL)
                 match_prioridade = re.search(r'PRIOR=([A-Za-z]+)', TEL)
                 Indice = (re.findall('//([\s\S]*?)//', TEL))[0].replace("\n", " ")
@@ -118,7 +123,7 @@ def Extracao(filepath, geraCsv, geraExcel):
                 if match_resumo:
                     Resumo = match_resumo.group(1)
                 else:
-                    Resumo = ""
+                    Resumo = "NA"
                 match_instrucoes = re.search(r"(cumpre |cumpri )(instrução|instruções)", TEL, re.IGNORECASE)
                 if match_instrucoes:
                     Instrucoes = "Sim"
@@ -137,7 +142,7 @@ def Extracao(filepath, geraCsv, geraExcel):
                     Processos = match_processos.group(0)
                 else:
                     Processos = "NA"
-                Dados.append([data_e_hora, Data.date(), "TEL", numero_tel, Ano, Remetente, Documento, Indice, Prioridade, Carater, Distribuicao, primeira_distribuicao, Redistribuicao, prim_redistribuicao, refdoc, Processos, "teor", "corpo", Resumo, "paises_ois", "pasta", Instrucoes])
+                Dados.append([data_e_hora, Data.date(), "TEL", numero_tel, Ano, Remetente, Documento, Indice, Prioridade, Carater, Distribuicao, primeira_distribuicao, Redistribuicao, prim_redistribuicao, refdoc, Processos, Teor, "corpo", Resumo, "paises_ois", "pasta", Instrucoes])
             TEL = []
         elif int(numero_pagina[0])//int(numero_pagina[2]) != 1:
             TEL.append(pagina)
@@ -146,4 +151,4 @@ def Extracao(filepath, geraCsv, geraExcel):
     if geraCsv == 1:
         gerarCsv("TELEGRAMAS", Dados)
 
-Extracao(filedialog.askopenfilename(title="Selecione um arquivo PDF", filetypes=[("Arquivos PDF", "*.pdf")]), 1, 1)
+#Extracao(filedialog.askopenfilename(title="Selecione um arquivo PDF", filetypes=[("Arquivos PDF", "*.pdf")]), 1, 1)
