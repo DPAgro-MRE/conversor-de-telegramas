@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+body, html{
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Open Sans';
+}
+
+/* CSS for header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #16214A;
+  font-family: 'Open Sans';
+}
+
+.logo-mre{
+  order: 1;
+  margin-left: 50px;
+}
+
+
+.nav-items {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #16214A;
+  margin-right: 20px;
+  order: 2;
+}
+
+.nav-items a {
+  text-decoration: none;
+  color: #f4f4f4;
+  padding: 35px 20px;
+}
+
+#logo_header{
+  margin-top: center;
+
+}
+
+.main{
+    position: relative;
+    padding-bottom: 100px;
+}
+
+
+.content{
+    min-height: 100%;
+    margin-bottom: -50px;
+  }
+  
+  .footer {
+    height: relative;
+    position: sticky;
+    padding: 20px 0;
+    display: flex;
+    bottom: 0;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #16214A;
+    padding: 40px 80px;
+  }
+  
+  .portal-footer p{
+    color: #f4f4f4;
+    font-weight: lighter;
+  
+  
+  }
+  
+  .footer-logos{
+    display: flexbox;
+  }
