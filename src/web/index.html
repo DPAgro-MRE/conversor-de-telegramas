@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conversor de Telegramas</title>
-    <link rel="stylesheet" href="static/index.css">
+    <link rel="stylesheet" href="static/css/index.css">
 </head>
 <body>
     <header class="header">
@@ -19,7 +19,19 @@
       </header>
 
       <main>
-        <h1>Testando</h1>
+        <h1>Conversor de Telegramas</h1>
+        <!--Tentativa de criação do container de upload-->
+        <form class="box" action="" method="post" enctype="multipart/form-data">
+            <div class="box_input">
+                <input class="box_file" type="file" name="files[]" id="file" data-multiple-caption="{count} files selected" multiple>
+                <label for="file"><strong>Escolha o arquivo</strong><span class="box_dragndrop"> ou arraste o arquivo aqui</span>.</label>
+                <button class="box_button" type="submit">Carregar</button>
+            </div>
+            <div class="box_uploading">Carregando...</div>
+            <div class="box_sucess">Carregado!</div>
+            <div class="box_error">Erro! <span></span>.</div>
+        </form>
+
 
       </main>
 

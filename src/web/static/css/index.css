@@ -43,11 +43,25 @@ body, html{
 
 }
 
-.main{
+main{
     position: relative;
     padding-bottom: 100px;
 }
 
+main h1{
+    color: black;
+    text-align: center;
+    font-size: 48px;
+    font-weight: bold;
+}
+
+/*Estilizando o formulário*/
+.box_dragndrop,
+.box_uploading,
+.box_sucess,
+.box_error{
+    display: none;
+}
 
 .content{
     min-height: 100%;
