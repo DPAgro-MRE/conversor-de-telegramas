@@ -44,4 +44,5 @@ pip install -r requirements.txt
     <td align="center"><a href="https://github.com/pedrosilv1514" target="_blank"><img style="border-radius: 50%;" src="https://github.com/pedrosilv1514.png" width="100px;" alt="Pedro Henrique"/><br /><sub><b>Pedro Henrique</b></sub></a><br/></td>
     <td align="center"><a href="https://github.com/Digs-LS" target="_blank"><img style="border-radius: 50%;" src="https://github.com/Digs-LS.png" width="100px;" alt="Diego Lucas"/><br /><sub><b>Diego Lucas</b></sub></a><br/></td>
     <td align="center"><a href="https://github.com/eduardopsousa" target="_blank"><img style="border-radius: 50%;" src="https://github.com/eduardopsousa.png" width="100px;" alt="Eduardo Pereira"/><br /><sub><b>Eduardo Pereira</b></sub></a><br/></td>
+    <td align="center"><a href="https://github.com/Sara-Andrade" target="_blank"><img style="border-radius: 50%;" src="https://github.com/Sara-Andrade.png" width="100px;" alt="Sara Andrade"/><br /><sub><b>Sara Andrade</b></sub></a><br/></td>
 </table>
