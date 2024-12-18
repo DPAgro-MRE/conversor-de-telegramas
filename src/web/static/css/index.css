@@ -55,6 +55,7 @@ main h1{
     font-weight: bold;
 }
 
+
 /*Estilizando o formulário*/
 .box_dragndrop,
 .box_uploading,
@@ -70,21 +71,18 @@ main h1{
   
   .footer {
     height: relative;
-    position: sticky;
-    padding: 20px 0;
+    position: fixed;
+    left: 0;
+    width: 100%;
     display: flex;
     bottom: 0;
     justify-content: space-between;
     align-items: center;
     background-color: #16214A;
-    padding: 40px 80px;
   }
   
   .portal-footer p{
     color: #f4f4f4;
-    font-weight: lighter;
-  
-  
   }
   
   .footer-logos{
