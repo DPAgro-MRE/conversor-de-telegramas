@@ -20,21 +20,22 @@
 
       <main>
         <h1>Conversor de Telegramas</h1>
-        <!--Tentativa de criação do container de upload-->
-        <form class="box" action="" method="post" enctype="multipart/form-data">
-            <div class="box_input">
-                <input class="box_file" type="file" name="files[]" id="file" data-multiple-caption="{count} files selected" multiple>
-                <label for="file"><strong>Escolha o arquivo</strong><span class="box_dragndrop"> ou arraste o arquivo aqui</span>.</label>
-                <button class="box_button" type="submit">Carregar</button>
-            </div>
-            <div class="box_uploading">Carregando...</div>
-            <div class="box_sucess">Carregado!</div>
-            <div class="box_error">Erro! <span></span>.</div>
-        </form>
+
+        <div class="container">
+          <div id="drop-zone">Arraste ou selecione o arquivo pdf desejado</div>
+          <input type="file" id="file-input" accept="application/pdf">
+          <button id="convert-button" disabled>Converter</button>
+      </div>
+  
+      <div class="overlay" id="overlay"></div>
+      <div class="popup" id="popup">
+          <p>PDF convertido com sucesso!</p>
+          <button id="close-popup">OK</button>
+      </div>
+  
 
 
       </main>
-
       <footer class="footer">
         <div class='footer-logos'>
           <a href="https://www.gov.br/mre/pt-br" target="blank">
@@ -48,5 +49,83 @@
           <p>Portal DPAgro</p>
         </div>
       </footer>
+
+      <!---Parte que utiliza javascript para o drag n' drop--->
+      <script>
+        const dropZone = document.getElementById("drop-zone");
+        const fileInput = document.getElementById("file-input");
+        const convertButton = document.getElementById("convert-button");
+        const popup = document.getElementById("popup");
+        const overlay = document.getElementById("overlay");
+        const closePopup = document.getElementById("close-popup");
+
+        let selectedFile = null;
+
+        // Drag and Drop Events
+        dropZone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            dropZone.classList.add("dragover");
+        });
+
+        dropZone.addEventListener("dragleave", () => {
+            dropZone.classList.remove("dragover");
+        });
+
+        dropZone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            dropZone.classList.remove("dragover");
+            handleFile(e.dataTransfer.files[0]);
+        });
+
+        dropZone.addEventListener("click", () => fileInput.click());
+
+        fileInput.addEventListener("change", (e) => {
+            handleFile(e.target.files[0]);
+        });
+
+        function handleFile(file) {
+            if (file && file.type === "application/pdf") {
+                selectedFile = file;
+                convertButton.disabled = false;
+                dropZone.textContent = `Selecionado: ${file.name}`;
+            } else {
+                alert("Selecione apenas arquivos em extensão pdf");
+            }
+        }
+
+        // Convert Button Click Event
+        convertButton.addEventListener("click", () => {
+            if (selectedFile) {
+                simulateConversion(selectedFile);
+            }
+        });
+
+        function simulateConversion(file) {
+            // Simulate some conversion process
+            setTimeout(() => {
+                showPopup();
+            }, 1500);
+        }
+
+        // Popup Controls
+        function showPopup() {
+            popup.classList.add("active");
+            overlay.classList.add("active");
+        }
+
+        closePopup.addEventListener("click", () => {
+            popup.classList.remove("active");
+            overlay.classList.remove("active");
+            resetForm();
+        });
+
+        function resetForm() {
+            dropZone.textContent = "Arraste ou selecione o arquivo pdf desejado";
+            convertButton.disabled = true;
+            fileInput.value = "";
+            selectedFile = null;
+        }
+    </script>
+      
 </body>
 </html>
