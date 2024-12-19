@@ -136,22 +136,33 @@ main h1{
   display: block;
 }
 
-  .footer {
-    height: relative;
-    position: fixed;
-    left: 0;
-    width: 100%;
-    display: flex;
-    bottom: 0;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #16214A;
-  }
+.footer {
+  height: relative;
+  position: fixed;
+  left: 0;
+  width: 100%;
+  display: flex;
+  bottom: 0;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #16214A;
+}
   
-  .portal-footer p{
-    color: #f4f4f4;
-  }
-  
-  .footer-logos{
-    display: flexbox;
-  }
+.assinatura_mre{
+  max-width: 170px;
+  max-height: 87px;
+}
+
+.logo_gov{
+  max-width: 197px;
+  max-height: 87px;
+}
+
+.portal-footer p{
+  color: #f4f4f4;
+  padding-right: 40px;
+}
+
+.footer-logos{
+  display: flexbox;
+}
