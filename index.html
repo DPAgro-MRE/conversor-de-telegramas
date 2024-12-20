@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Telegramas</title>
+    <link rel="stylesheet" href="src/web/static/css/index.css">
+</head>
+<body>
+    <header class="header">
+        <img src="src/web/assets/logo.png" id="logo-header" class="logo-mre" alt="logo_ministério">
+        <nav class="nav-items">
+          <a href="#">Home</a>
+          <a href="#">FAQ</a>
+          <a href="#">Contato</a>
+          <a target="blank" href="https://portal-dpagro.github.io/"><img id="logo_header" src="src/web/assets/portal_dpagro_header.svg" alt="portal_dpagro_logo"></a>
+          <!--<a target="blank"  href="https://portal-dpagro.github.io/">Portal DPagro</a>--> 
+        </nav>
+      </header>
+
+      <main>
+        <h1>Conversor de Telegramas</h1>
+
+        <div class="container">
+          <div id="drop-zone">Arraste ou selecione o arquivo pdf desejado</div>
+          <input type="file" id="file-input" accept="application/pdf">
+          <button id="convert-button" disabled>Converter</button>
+      </div>
+  
+      <div class="overlay" id="overlay"></div>
+      <div class="popup" id="popup">
+          <p>PDF convertido com sucesso!</p>
+          <button id="close-popup">OK</button>
+      </div>
+  
+
+
+      </main>
+      <footer class="footer">
+        <div class='footer-logos'>
+          <a href="https://www.gov.br/mre/pt-br" target="blank">
+            <img id="logo_mre" src="src/web/assets/Logo MRE.svg" class="assinatura_mre" alt="assinatura_mre">
+          </a>
+          <a href="https://www.gov.br/pt-br" target="blank">
+            <img id="logo_gov" src="src/web/assets/Logo Governo Federal.svg" class="logo_gov" alt="logo_governo_federal">
+          </a>
+        </div>
+        <div class="portal-footer">
+          <p>Portal DPAgro</p>
+        </div>
+      </footer>
+      
+    <!---Parte que utiliza javascript para o drag n' drop--->
+    <script>
+        const dropZone = document.getElementById("drop-zone");
+        const fileInput = document.getElementById("file-input");
+        const convertButton = document.getElementById("convert-button");
+        const popup = document.getElementById("popup");
+        const overlay = document.getElementById("overlay");
+        const closePopup = document.getElementById("close-popup");
+
+        let selectedFile = null;
+
+        // Drag and Drop Events
+        dropZone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            dropZone.classList.add("dragover");
+        });
+
+        dropZone.addEventListener("dragleave", () => {
+            dropZone.classList.remove("dragover");
+        });
+
+        dropZone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            dropZone.classList.remove("dragover");
+            handleFile(e.dataTransfer.files[0]);
+        });
+
+        dropZone.addEventListener("click", () => fileInput.click());
+
+        fileInput.addEventListener("change", (e) => {
+            handleFile(e.target.files[0]);
+        });
+
+        function handleFile(file) {
+            if (file && file.type === "application/pdf") {
+                selectedFile = file;
+                convertButton.disabled = false;
+                dropZone.textContent = `Selecionado: ${file.name}`;
+            } else {
+                alert("Selecione apenas arquivos em extensão pdf");
+            }
+        }
+
+        // Convert Button Click Event
+        convertButton.addEventListener("click", () => {
+            if (selectedFile) {
+                simulateConversion(selectedFile);
+            }
+        });
+
+        function simulateConversion(file) {
+            // Simulate some conversion process
+            setTimeout(() => {
+                showPopup();
+            }, 1500);
+        }
+
+        // Popup Controls
+        function showPopup() {
+            popup.classList.add("active");
+            overlay.classList.add("active");
+        }
+
+        closePopup.addEventListener("click", () => {
+            popup.classList.remove("active");
+            overlay.classList.remove("active");
+            resetForm();
+        });
+
+        function resetForm() {
+            dropZone.textContent = "Arraste ou selecione o arquivo pdf desejado";
+            convertButton.disabled = true;
+            fileInput.value = "";
+            selectedFile = null;
+        }
+    </script>
+    
+</body>
+</html>

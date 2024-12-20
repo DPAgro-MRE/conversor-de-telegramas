@@ -55,38 +55,114 @@ main h1{
     font-weight: bold;
 }
 
-/*Estilizando o formulário*/
-.box_dragndrop,
-.box_uploading,
-.box_sucess,
-.box_error{
-    display: none;
+.container {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.content{
-    min-height: 100%;
-    margin-bottom: -50px;
-  }
+
+#drop-zone {
+  border: 2px dashed #4a90e2;
+  border-radius: 8px;
+  width: 775px;
+  height: 385px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  cursor: pointer;
+}
+
+#drop-zone.dragover {
+  border-color: #2c82c9;
+  background-color: #eef6fc;
+}
+
+#file-input {
+  display: none;
+}
+
+#convert-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4a90e2;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#convert-button:disabled {
+  background-color: #a4c5e9;
+  cursor: not-allowed;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: 500px;
+  height: 500px;
+}
+
+.popup.active {
+  display: block;
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.overlay.active {
+  display: block;
+}
+
+.footer {
+  height: relative;
+  position: fixed;
+  left: 0;
+  width: 100%;
+  display: flex;
+  bottom: 0;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #16214A;
+}
   
-  .footer {
-    height: relative;
-    position: sticky;
-    padding: 20px 0;
-    display: flex;
-    bottom: 0;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #16214A;
-    padding: 40px 80px;
-  }
-  
-  .portal-footer p{
-    color: #f4f4f4;
-    font-weight: lighter;
-  
-  
-  }
-  
-  .footer-logos{
-    display: flexbox;
-  }
+.assinatura_mre{
+  max-width: 170px;
+  max-height: 87px;
+}
+
+.logo_gov{
+  max-width: 197px;
+  max-height: 87px;
+}
+
+.portal-footer p{
+  color: #f4f4f4;
+  padding-right: 40px;
+}
+
+.footer-logos{
+  display: flexbox;
+}
