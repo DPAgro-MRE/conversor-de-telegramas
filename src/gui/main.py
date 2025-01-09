@@ -62,6 +62,13 @@ def message_success():
 def message_error():
     messagebox.showerror("Conversor de Telegramas", "Erro na conversão \nPDF inserido não é um telegrama!")
 
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.join(os.path.abspath("."), "src", "gui")
+    return os.path.join(base_path, relative_path)
+
 def select_pdf():
     global filename
     global filepath
@@ -108,7 +115,7 @@ container_frame.place(relx=0.5, rely=0.5, anchor="center",)
 container_frame.propagate(True)
 '''
 #Header
-header_path = os.path.join(current_dir, "header-dpagro.png")
+header_path = resource_path('header-dpagro.png')
 
 try:
     if not os.path.isfile(header_path):
@@ -126,7 +133,7 @@ except FileNotFoundError as e:
 #Definição e configurações da logo
 
 # Configurar caminho da logo
-logo_path = os.path.join(current_dir,"logo-portal-dpagro.png")
+logo_path = resource_path('logo-portal-dpagro.png')
 
 try:
     if not os.path.isfile(logo_path):
@@ -152,7 +159,7 @@ selection_label = ctk.CTkLabel(app, text="Selecione o arquivo pdf para a convers
 selection_label.place(x=273, y=190)
 
 # Icon do pdf
-pdf_icon = os.path.join(current_dir, "pdf-icon.png")
+pdf_icon = resource_path("pdf-icon.png")
 
 try:
     if not os.path.isfile(pdf_icon):
@@ -207,6 +214,8 @@ def safe_extraction(filepath, csv_flag, xlsx_flag):
 button = ctk.CTkButton(app, text="Converter", width=183, height=44, font=('Lato', 24, "bold"), command=lambda: safe_extraction(filepath, checkbox_csv.get(), checkbox_xlsx.get()))
 button.grid(row=0, column=0, padx=50, pady=50)
 button.place(x=367, y=515)
+
+icon = ImageTk.PhotoImage(file=resource_path("icone.ico"))
 
 '''
 #Definições e configurações de widgets
