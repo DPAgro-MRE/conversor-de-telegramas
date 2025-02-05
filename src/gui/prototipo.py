@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import filedialog
 from openpyxl import Workbook
+from openpyxl.styles import Font
 import os
 import re
 import pytz
@@ -9,10 +10,10 @@ import PyPDF2
 import pandas as pd
 from datetime import datetime
 
-def gerarCsv(nome_arquivo, dados):
+def gerarCsv(dados):
     try:
         pasta_downloads = os.path.join(os.path.expanduser("~"), "Downloads")
-        caminho_csv = os.path.join(pasta_downloads, nome_arquivo + ".csv")
+        caminho_csv = os.path.join(pasta_downloads, "COLEÇÃO.csv")
         with open(caminho_csv, mode='w', newline='', encoding='utf-8-sig') as arquivo_csv:
             escritor = csv.writer(arquivo_csv)
             escritor.writerow(["data_hora_entrada", "data_documento", "tipo_documento", "numero", "ano", "remetente", "documento", "indice", "prioridade", "carater", "distribuicao", "primdistribuicao", "redistribuicao", "primredistribuicao", "refdoc", "processos_sei", "teor", "corpo", "resumo", "paises_ois", "pasta", "apenas_cumpre_instrucoes"])
@@ -21,16 +22,22 @@ def gerarCsv(nome_arquivo, dados):
     except Exception as e:
         print(f"Erro ao criar o arquivo CSV: {e}")
 
-def gerarExcel(nome_arquivo, dados):
+def gerarExcel(dados):
     try:
         pasta_downloads = os.path.join(os.path.expanduser("~"), "Downloads")
-        caminho_arquivo = os.path.join(pasta_downloads, nome_arquivo + ".xlsx")
+        caminho_arquivo = os.path.join(pasta_downloads, "COLEÇÃO.xlsx")
         workbook = Workbook()
         planilha = workbook.active
         planilha.title = "Coleção"
         planilha.append(["data_hora_entrada", "data_documento", "tipo_documento", "numero", "ano", "remetente", "documento", "indice", "prioridade", "carater", "distribuicao", "primdistribuicao", "redistribuicao", "primredistribuicao", "refdoc", "processos_sei", "teor", "corpo", "resumo", "paises_ois", "pasta", "apenas_cumpre_instrucoes"])
         for linha in dados:
             planilha.append(linha)
+        for row in planilha.iter_rows(min_row=2, max_row=planilha.max_row, max_col=planilha.max_column):
+            # Se encontrar "Reservado" em alguma célula da linha
+            if any(cell.value == "Reservado" for cell in row):
+                # Aplica a fonte vermelha para todas as células da linha
+                for cell in row:
+                    cell.font = Font(color="FF0000")
         workbook.save(caminho_arquivo)
         print(f"Arquivo Excel criado em: {caminho_arquivo}")
     except Exception as e:
@@ -51,7 +58,7 @@ def gerarTxt(textoPdf, NumTel):
     except Exception as e:
         print(f"Erro ao salvar o arquivo .txt: {e}")
 
-def Extracao(filepath, geraCsv, geraExcel):
+def Extracao(filepath, geraCsv, geraExcel, DPAgro):
     dicioDetecta = {'Afeganistão': 'Afeganistão', 'África do Sul': 'África do Sul', 'ALADI': 'aladi', 'Albânia': 'Albânia', 'Alemanha': 'Alemanha', 'Andorra': 'Andorra', 'Angola': 'Angola', 'ANGUILA': 'ANGUILA', 'Antígua e Barbuda': 'Antígua e Barbuda', 'Arábia Saudita': 'Arábia Saudita', 'Argélia': 'Argélia', 'Argentina': 'Argentina', 'Armênia': 'Armênia', 'Aruba': 'Aruba', 'Austrália': 'Austrália', 'Áustria': 'Áustria', 'Azerbaijão': 'Azerbaijão', 'Bahamas': 'Bahamas', 'Bahrein': 'Bahrein', 'Bangladesh': 'Bangladesh', 'Barbados': 'Barbados', 'Belarus': 'Belarus', 'Bélgica': 'Bélgica', 'Belize': 'Belize', 'Benin': 'Benin', 'BERMUDA': 'BERMUDA', 'Bolívia': 'Bolívia', 'BONAIRE, SINT EUSTATIUS E SABA': 'BONAIRE, SINT EUSTATIUS E SABA', 'Bósnia e Herzegovina': 'Bósnia e Herzegovina', 'Botsuana': 'Botsuana', 'Brunei': 'Brunei', 'Bulgária': 'Bulgária', 'Burkina Faso': 'Burkina Faso', 'Burundi': 'Burundi', 'Butão': 'Butão', 'Cabo Verde': 'Cabo Verde', 'Camboja': 'Camboja', 'Cameroun (Camarões)': 'Cameroun (Camarões)', 'Cameroun': 'Cameroun (Camarões)', 'Canadá': 'Canadá', 'CARICOM': 'CARICOM', 'Catar': 'Catar', 'Cazaquistão': 'Cazaquistão', 'CDB': 'CDB', 'CEEA': 'CEEA', 'CFC/FCPB': 'CFC/FCPB', 'Chade': 'Chade', 'Chile': 'Chile', 'China': 'China', 'Chipre': 'Chipre', 'CIPV': 'CIPV', 'Codex Alimentarius': 'Codex Alimentarius', 'COI': 'COI', 'Colômbia': 'Colômbia', 'Comores': 'Comores', 'Congo': 'Congo', 'Coreia do Norte': 'Coreia do Norte', 'Coreia do Sul': 'Coreia do Sul', 'Costa Rica': 'Costa Rica', "Côte D'Ivoire (Costa do Marfim)": "Côte D'Ivoire (Costa do Marfim)", "Côte D'Ivoire": "Côte D'Ivoire (Costa do Marfim)", 'Costa do Marfim': "Côte D'Ivoire (Costa do Marfim)", 'CPLP': 'cplp', 'Croácia': 'Croácia', 'Cuba': 'Cuba', 'CURAÇAO': 'CURAÇAO', 'Dinamarca': 'Dinamarca', 'Djibouti (Djibuti)': 'Djibouti (Djibuti)', 'Djibouti': 'Djibouti (Djibuti)', 'Djibuti': 'Djibouti (Djibuti)', 'Dominica': 'Dominica', 'Egito': 'Egito', 'El Salvador': 'El Salvador', 'Emirados Árabes': 'Emirados Árabes', 'Emirados Árabes Unidos': 'Emirados Árabes', 'EAU': 'Emirados Árabes', 'Equador': 'Equador', 'Eritreia': 'Eritreia', 'Eslováquia': 'Eslováquia', 'Eslovênia': 'Eslovênia', 'Espanha': 'Espanha', 'Estados Unidos': 'Estados Unidos', 'EUA': 'Estados Unidos', 'Estônia': 'Estônia', 'Etiópia': 'Etiópia', 'FAO': 'FAO', 'Fiji': 'Fiji', 'Filipinas': 'Filipinas', 'Finlândia': 'Finlândia', 'França': 'França', 'Gabão': 'Gabão', 'Gâmbia': 'Gâmbia', 'Gana': 'Gana', 'Geórgia': 'Geórgia', 'GEÓRGIA DO SUL E AS ILHAS SANDWICH': 'GEÓRGIA DO SUL E AS ILHAS SANDWICH', 'GIBRALTAR': 'GIBRALTAR', 'Granada': 'Granada', 'Grécia': 'Grécia', 'GROENLÂNDIA': 'GROENLÂNDIA', 'GUADALUPE': 'GUADALUPE', 'GUAM': 'GUAM', 'Guatemala': 'Guatemala', 'GUERNSEY': 'GUERNSEY', 'Guiana': 'Guiana', 'GUIANA FRANCESA': 'GUIANA FRANCESA', 'Guiné Equatorial': 'Guiné Equatorial', 'Guiné-Bissau': 'Guiné-Bissau', 'Guiné-Conacri': 'Guiné-Conacri', 'Guiné': 'Guiné-Conacri', 'Haiti': 'Haiti', 'Honduras': 'Honduras', 'Hong Kong': 'Hong Kong', 'Hungria': 'Hungria', 'ICAC': 'ICAC', 'Iêmen': 'Iêmen', 'ILHA DE BOUVET': 'ILHA DE BOUVET', 'ILHA DE MAN': 'ILHA DE MAN', 'ILHA DO NATAL': 'ILHA DO NATAL', 'ILHA NORFOLK': 'ILHA NORFOLK', 'ILHAS CAYMAN': 'ILHAS CAYMAN', 'ILHAS COCOS': 'ILHAS COCOS', 'ILHAS COOK': 'ILHAS COOK', 'ILHAS DE ÅLAND': 'ILHAS DE ÅLAND', 'ILHAS FAROE': 'ILHAS FAROE', 'ILHAS HEARD E ILHAS McDONALD': 'ILHAS HEARD E ILHAS McDONALD', 'ILHAS MALVINAS (FALKLAND)': 'ILHAS MALVINAS (FALKLAND)', 'ILHAS MARIANAS DO NORTE': 'ILHAS MARIANAS DO NORTE', 'Ilhas Marshall': 'Ilhas Marshall', 'ILHAS OUTONARES MENORES DOS ESTADOS UNIDOS': 'ILHAS OUTONARES MENORES DOS ESTADOS UNIDOS', 'Ilhas Salomão': 'Ilhas Salomão', 'ILHAS VIRGENS (BRITÂNICAS)': 'ILHAS VIRGENS (BRITÂNICAS)', 'ILHAS VIRGENS (EUA)': 'ILHAS VIRGENS (EUA)', 'Índia': 'Índia', 'Indonésia': 'Indonésia', 'Irã': 'Irã', 'Iraque': 'Iraque', 'Irlanda': 'Irlanda', 'Islândia': 'Islândia', 'Israel': 'Israel', 'Itália': 'Itália', 'Jamaica': 'Jamaica', 'Japão': 'Japão', 'JERSEY': 'JERSEY', 'Jordânia': 'Jordânia', 'Kiribati': 'Kiribati', 'Kuaite (Kuwait)': 'Kuaite (Kuwait)', 'Kuaite': 'Kuaite (Kuwait)', 'Kuwait': 'Kuaite (Kuwait)', 'Laos': 'Laos', 'Lesoto': 'Lesoto', 'Letônia': 'Letônia', 'Líbano': 'Líbano', 'Libéria': 'Libéria', 'Líbia': 'Líbia', 'Liechtenstein': 'Liechtenstein', 'Lituânia': 'Lituânia', 'Luxemburgo': 'Luxemburgo', 'MACAU': 'MACAU', 'Macedônia do Norte': 'Macedônia do Norte', 'Madagascar': 'Madagascar', 'Malásia': 'Malásia', 'Malauí (Malawi)': 'Malauí (Malawi)', 'Malauí': 'Malauí (Malawi)', 'Malawi': 'Malauí (Malawi)', 'Maldivas': 'Maldivas', 'Mali': 'Mali', 'Malta': 'Malta', 'Marrocos': 'Marrocos', 'MARTINICA': 'MARTINICA', 'Maurício': 'Maurício', 'Mauritânia': 'Mauritânia', 'MAYOTTE': 'MAYOTTE', 'MERCOSUL': 'MERCOSUL', 'México': 'México', 'Mianmar (Myanmar)': 'Mianmar (Myanmar)', 'Mianmar': 'Mianmar (Myanmar)', 'Myanmar': 'Mianmar (Myanmar)', 'Micronésia': 'Micronésia', 'Moçambique': 'Moçambique', 'Moldova (Moldávia)': 'Moldova (Moldávia)', 'Moldova': 'Moldova (Moldávia)', 'Moldávia': 'Moldova (Moldávia)', 'Mônaco': 'Mônaco', 'Mongólia': 'Mongólia', 'Montenegro': 'Montenegro', 'MONTSERRAT': 'MONTSERRAT', 'Namíbia': 'Namíbia', 'Nauru': 'Nauru', 'Nepal': 'Nepal', 'Nicarágua': 'Nicarágua', 'Níger': 'Níger', 'Nigéria': 'Nigéria', 'NIUE': 'NIUE', 'Noruega': 'Noruega', 'NOVA CALEDÔNIA': 'NOVA CALEDÔNIA', 'Nova Zelândia': 'Nova Zelândia', 'OCDE': 'OCDE', 'OEA': 'OEA', 'OIAçúcar': 'OIAçúcar', 'Organização Internacional do Açúcar': 'OIAçúcar', 'OICacau/ICCO': 'OICacau/ICCO', 'OICacau': 'OICacau/ICCO', 'ICCO': 'OICacau/ICCO', 'OICafé': 'OICafé', 'Organização Internacional do Café': 'OICafé', 'OIE': 'OIE', 'OIV': 'OIV', 'Omã': 'Omã', 'OMC': 'OMC', 'OMS': 'OMS', 'ONU': 'ONU', 'Nações Unidas': 'ONU', 'Países Baixos': 'Países Baixos', 'Palau': 'Palau', 'Palestina': 'Palestina', 'Panamá': 'Panamá', 'Papua Nova Guiné': 'Papua Nova Guiné', 'Paquistão': 'Paquistão', 'Paraguai': 'Paraguai', 'Peru': 'Peru', 'PITCAIRN': 'PITCAIRN', 'POLINÉSIA FRANCESA': 'POLINÉSIA FRANCESA', 'Polônia': 'Polônia', 'PORTO RICO': 'PORTO RICO', 'Portugal': 'Portugal', 'Quênia': 'Quênia', 'Quirguistão': 'Quirguistão', 'Reino Unido': 'Reino Unido', 'Rep. Centro-Africana': 'Rep. Centro-Africana', 'Rep. Dem. do Congo': 'Rep. Dem. do Congo', 'República Dominicana': 'República Dominicana', 'Rep. Dom.': 'República Dominicana', 'RepDom': 'República Dominicana', 'República Tcheca': 'República Tcheca', 'RÉUNION': 'RÉUNION', 'Romênia': 'Romênia', 'Ruanda': 'Ruanda', 'Rússia': 'Rússia', 'SAARA OCIDENTAL': 'SAARA OCIDENTAL', 'SAINT BARTHÉLEMY': 'SAINT BARTHÉLEMY', 'SAINT HELENA, ASCENSION E TRISTAN DA CUNHA': 'SAINT HELENA, ASCENSION E TRISTAN DA CUNHA', 'Samoa': 'Samoa', 'SAMOA AMERICANA': 'SAMOA AMERICANA', 'San Marino': 'San Marino', 'Santa Lúcia': 'Santa Lúcia', 'Santa Sé (Vaticano)': 'Santa Sé (Vaticano)', 'Santa Sé': 'Santa Sé (Vaticano)', 'Vaticano': 'Santa Sé (Vaticano)', 'São Cristóvão e Névis': 'São Cristóvão e Névis', 'SÃO MARTINHO (PARTE FRANCESA)': 'SÃO MARTINHO (PARTE FRANCESA)', 'SÃO PIERRE E MIQUELON': 'SÃO PIERRE E MIQUELON', 'São Tomé e Principe': 'São Tomé e Principe', 'São Vicente e Granadinas': 'São Vicente e Granadinas', 'Seichelles (Seychelles)': 'Seichelles (Seychelles)', 'Seichelles': 'Seichelles (Seychelles)', 'Seychelles': 'Seichelles (Seychelles)', 'Seicheles': 'Seichelles (Seychelles)', 'Senegal': 'Senegal', 'Serra Leoa': 'Serra Leoa', 'Sérvia': 'Sérvia', 'Singapura (Cingapura)': 'Singapura (Cingapura)', 'Singapura': 'Singapura (Cingapura)', 'Cingapura': 'Singapura (Cingapura)', 'SINT MAARTEN (PARTE HOLANDESA)': 'SINT MAARTEN (PARTE HOLANDESA)', 'Síria': 'Síria', 'Somália': 'Somália', 'Sri Lanka': 'Sri Lanka', 'Suazilândia': 'Suazilândia', 'Sudão': 'Sudão', 'Sudão do Sul': 'Sudão do Sul', 'Suécia': 'Suécia', 'Suíça': 'Suíça', 'Suriname': 'Suriname', 'SVALBARD E JAN MAYEN': 'SVALBARD E JAN MAYEN', 'Tadjiquistão': 'Tadjiquistão', 'Tailândia': 'Tailândia', 'Taiwan': 'Taiwan', 'Tanzânia': 'Tanzânia', 'TERRITÓRIO OCEANO BRITÂNICO (THE)': 'TERRITÓRIO OCEANO BRITÂNICO (THE)', 'TERRITÓRIOS DO SUL FRANCÊS': 'TERRITÓRIOS DO SUL FRANCÊS', 'Timor-Leste (Timor Leste)': 'Timor-Leste (Timor Leste)', 'Timor-Leste': 'Timor-Leste (Timor Leste)', 'Timor Leste': 'Timor-Leste (Timor Leste)', 'Togo': 'Togo', 'TOKELAU': 'TOKELAU', 'Tonga': 'Tonga', 'Trinidad e Tobago': 'Trinidad e Tobago', 'Tunísia': 'Tunísia', 'Turcomenistão': 'Turcomenistão', 'TURKS E CAICOS ISLANDS': 'TURKS E CAICOS ISLANDS', 'Turquia': 'Turquia', 'Tuvalu': 'Tuvalu', 'Ucrânia': 'Ucrânia', 'Uganda': 'Uganda', 'União Europeia': 'União Europeia', 'UE': 'União Europeia', 'Uruguai': 'Uruguai', 'Uzbequistão': 'Uzbequistão', 'Vanuatu': 'Vanuatu', 'VÁRIOS PAÍSES': 'VÁRIOS PAÍSES', 'Venezuela': 'Venezuela', 'Vietnã': 'Vietnã', 'WALLIS E FUTUNA': 'WALLIS E FUTUNA', 'Zâmbia': 'Zâmbia', 'Zimbábue': 'Zimbábue'}
     # ^ Dicionário com os países que aparecem no índice dos telegramas, sendo a Key do dicionário o nome do país a ser identificado no texto, e o seu Value o nome que ficará na coluna paises_ois da planilha.
     
@@ -114,89 +121,87 @@ def Extracao(filepath, geraCsv, geraExcel):
                     Redistribuicao = "NA"
                     prim_redistribuicao = "NA"
 
-                # O telegrama será adicionado à planilha somente se a distribuição principal for da DPAgro.
-                if match_distribuicao.group(1).lower().startswith("dpagro") or Redistribuicao.lower().startswith("dpagro"): 
-                    Distribuicao = match_distribuicao.group(1) 
+                Distribuicao = match_distribuicao.group(1) 
+                match_remetente_e_data = re.search(r"De (.*?) para Exteriores em (\d{2}/\d{2}/\d{4})", TEL)
+                Remetente = match_remetente_e_data.group(1)
+                data_expedicao = match_remetente_e_data.group(2)
 
-                    match_remetente_e_data = re.search(r"De (.*?) para Exteriores em (\d{2}/\d{2}/\d{4})", TEL)
-                    Remetente = match_remetente_e_data.group(1)
-                    data_expedicao = match_remetente_e_data.group(2)
+                match_prioridade = re.search(r'PRIOR=([\wÀ-ÿ]+)', TEL)
+                match_carater = re.search(r'CARAT=([A-Za-z]+)', TEL)
+                Indice = (re.findall('//([\s\S]*?)//', TEL))[0].replace("\n", " ").lstrip() #Procura o índice onde houver duas barras seguidas no telegrama, delimitando o início e fim.
+                Carater = match_carater.group(1) 
+                Prioridade = match_prioridade.group(1) 
+                primeira_distribuicao = "DPAGRO"
 
-                    match_prioridade = re.search(r'PRIOR=([\wÀ-ÿ]+)', TEL)
-                    match_carater = re.search(r'CARAT=([A-Za-z]+)', TEL)
-                    Indice = (re.findall('//([\s\S]*?)//', TEL))[0].replace("\n", " ").lstrip() #Procura o índice onde houver duas barras seguidas no telegrama, delimitando o início e fim.
-                    Carater = match_carater.group(1) 
-                    Prioridade = match_prioridade.group(1) 
-                    primeira_distribuicao = "DPAGRO"
+                data_e_hora = f"{data_recebimento[6:] + '-' + data_recebimento[3:5] + '-' + data_recebimento[:2]}T{hora_entrada}Z" #Coloca a data no formato aceito pelo fluxo do Power Automate.
+                Data = datetime.strptime(data_expedicao, "%d/%m/%Y") 
+                Ano = Data.year 
+                Documento = f"TEL {numero_tel}/{Ano}/{Remetente}"
+                match_resumo = re.search(r'RESUMO=\n(.*?)(\n\s*\n)', TEL, re.DOTALL)
+                
+                Pais = "NA"
+                pasta_pais = "NA"
+                IndicePais = Indice.split(".")
+                continua = True
+                #Procura país pelo índice, o país será o primeiro que for encontrado da esquerda para a direita.
+                for i in range(len(IndicePais)):
+                    for pais, nome_país in dicioDetecta.items(): 
+                        if continua:
+                            padrao = rf'\b{re.escape(pais)}\b'
+                            resultado = re.search(padrao, IndicePais[i])
+                            if resultado:
+                                Pais = nome_país
+                                pasta_pais = dicioPasta[nome_país]
+                                continua = False
+                
+                match_resumo = re.search(r'RESUMO=\n(.*?)(\n\s*\n)', TEL, re.DOTALL) #Procura o conteúdo que estiver depois de "RESUMO=" até achar uma quebra de linha vazia.
+                if match_resumo:
+                    Resumo = match_resumo.group(1).split('\n')
+                    Resumo = " ".join(Resumo)
+                else:
+                    Resumo = "NA"
+                Teor = TEL
+                Teor = re.sub(r'(\n\s*){2,}', '\n\n', Teor)
+                match_corpo = re.search(r'(Nr\.\s\d+\s)(.*)', Teor, re.DOTALL) #Extrai todo o texto após o número do telegrama 
+                Corpo = match_corpo.group(2)
+                Corpo = re.sub(r"Retransmissão automática para .*?\r?\n\r?\n|Retransmitido via clic para .*?\r?\n\r?\n|RESUMO=.*?\r?\n\r?\n", "", Corpo, flags=re.DOTALL)
+                # ^ Remove retransmissões e resumo do corpo.
+                Corpo = re.sub(r'\n\s*\n', '\n\n', Corpo) #Substitui quebras de linha dupla por quebras de linha simples.
+                Teor = re.sub(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]', '', Teor) #Remove caracteres invisíveis, que resultariam em problema na geração do .xlsx.
+                Corpo = re.sub(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]', '', Corpo) #Remove caracteres invisíveis, que resultariam em problema na geração do .xlsx.
+                Corpo = re.sub(r'(?<=[\w.,;!?])\n(?=[^\n])', ' ', Corpo)
+            
+                match_instrucoes = re.search(r"(cumpre |cumpri |cumpro )(instrução|instruções)", TEL, re.IGNORECASE)
+                if match_instrucoes:
+                    Instrucoes = "Sim"
+                else:
+                    Instrucoes = "Não"
 
-                    data_e_hora = f"{data_recebimento[6:] + '-' + data_recebimento[3:5] + '-' + data_recebimento[:2]}T{hora_entrada}Z" #Coloca a data no formato aceito pelo fluxo do Power Automate.
-                    Data = datetime.strptime(data_expedicao, "%d/%m/%Y") 
-                    Ano = Data.year 
-                    Documento = f"TEL {numero_tel}/{Ano}/{Remetente}"
-                    match_resumo = re.search(r'RESUMO=\n(.*?)(\n\s*\n)', TEL, re.DOTALL)
-                    
-                    Pais = "NA"
-                    pasta_pais = "NA"
-                    IndicePais = Indice.split(".")
-                    continua = True
-                    #Procura país pelo índice, o país será o primeiro que for encontrado da esquerda para a direita.
-                    for i in range(len(IndicePais)):
-                        for pais, nome_país in dicioDetecta.items(): 
-                            if continua:
-                                padrao = rf'\b{re.escape(pais)}\b'
-                                resultado = re.search(padrao, IndicePais[i])
-                                if resultado:
-                                    Pais = nome_país
-                                    pasta_pais = dicioPasta[nome_país]
-                                    continua = False;
-                    
-                    match_resumo = re.search(r'RESUMO=\n(.*?)(\n\s*\n)', TEL, re.DOTALL) #Procura o conteúdo que estiver depois de "RESUMO=" até achar uma quebra de linha vazia.
-                    if match_resumo:
-                        Resumo = match_resumo.group(1).split('\n')
-                        Resumo = " ".join(Resumo)
-                    else:
-                        Resumo = "NA"
+                match_ref_doc = re.search(r'REF/ADIT=(.*)', TEL)
+                if match_ref_doc:
+                    refdoc = re.sub(r'(TEL [0-9]+|DET [0-9]+) ([0-9]{4})', r'\1/\2/<posto>', match_ref_doc.group(1))
+                    refdoc = re.sub(r'(TEL [0-9]+|DET [0-9]+),', r'\1/<ano>/<posto>,', refdoc)
+                    refdoc = re.sub(r'(TEL [0-9]+|DET [0-9]+)$', r'\1/<ano>/<posto>', refdoc)
+                    refdoc = refdoc.replace('<ano>', str(Ano)).replace('<posto>', Remetente)
+                else:
+                    refdoc = "NA"
 
-                    if Carater == 'Reservado':
-                        Teor = "RESERVADO"
-                        Corpo = "RESERVADO"
-                    else:
-                        Teor = TEL
-                        Teor = re.sub(r'(\n\s*){2,}', '\n\n', Teor)
-                        match_corpo = re.search(r'(Nr\.\s\d+\s)(.*)', Teor, re.DOTALL) #Extrai todo o texto após o número do telegrama 
-                        Corpo = match_corpo.group(2)
-                        Corpo = re.sub(r"Retransmissão automática para .*?\r?\n\r?\n|Retransmitido via clic para .*?\r?\n\r?\n|RESUMO=.*?\r?\n\r?\n", "", Corpo, flags=re.DOTALL)
-                        # ^ Remove retransmissões e resumo do corpo.
-                        Corpo = re.sub(r'\n\s*\n', '\n\n', Corpo) #Substitui quebras de linha dupla por quebras de linha simples.
-                        Teor = re.sub(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]', '', Teor) #Remove caracteres invisíveis, que resultariam em problema na geração do .xlsx.
-                        Corpo = re.sub(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]', '', Corpo) #Remove caracteres invisíveis, que resultariam em problema na geração do .xlsx.
-                        Corpo = re.sub(r'(?<=[\w.,;!?])\n(?=[^\n])', ' ', Corpo)
-                    
-                    match_instrucoes = re.search(r"(cumpre |cumpri |cumpro )(instrução|instruções)", TEL, re.IGNORECASE)
-                    if match_instrucoes:
-                        Instrucoes = "Sim"
-                    else:
-                        Instrucoes = "Não"
-
-                    match_ref_doc = re.search(r'REF/ADIT=(.*)', TEL)
-                    if match_ref_doc:
-                        refdoc = re.sub(r'(TEL [0-9]+|DET [0-9]+) ([0-9]{4})', r'\1/\2/<posto>', match_ref_doc.group(1))
-                        refdoc = re.sub(r'(TEL [0-9]+|DET [0-9]+),', r'\1/<ano>/<posto>,', refdoc)
-                        refdoc = re.sub(r'(TEL [0-9]+|DET [0-9]+)$', r'\1/<ano>/<posto>', refdoc)
-                        refdoc = refdoc.replace('<ano>', str(Ano)).replace('<posto>', Remetente)
-                    else:
-                        refdoc = "NA"
-
-                    match_processos = re.search(r"(\d{5}\.\d{6}/\d{4}-\d{2})", TEL)
-                    if match_processos:
-                        Processos = match_processos.group(0)
-                    else:
-                        Processos = "NA"
-                    
-                    #Adiciona todos os dados obtidos à lista Dados, que posteriormente será utilizada para gerar os arquivos .xlsx e .csv.
+                match_processos = re.search(r"(\d{5}\.\d{6}/\d{4}-\d{2})", TEL)
+                if match_processos:
+                    Processos = match_processos.group(0)
+                else:
+                    Processos = "NA"
+                if Carater == 'Reservado':
+                    Teor = "RESERVADO"
+                    Corpo = "RESERVADO"
+                #Adiciona todos os dados obtidos à lista Dados, que posteriormente será utilizada para gerar os arquivos .xlsx e .csv. 
+                #Se a checkbox "DPAgro" estiver marcada, apenas telegramas com primeira distribuição sendo da DPAgro serão adicionados.
+                if DPAgro == 1 and (match_distribuicao.group(1).lower().startswith("dpagro") or Redistribuicao.lower().startswith("dpagro")):
+                    Dados.append([data_e_hora, Data.date(), "TEL", numero_tel, Ano, Remetente, Documento, Indice, Prioridade, Carater, Distribuicao, primeira_distribuicao, Redistribuicao, prim_redistribuicao, refdoc, Processos, Teor, Corpo, Resumo, Pais, pasta_pais, Instrucoes])
+                elif DPAgro == 0:
                     Dados.append([data_e_hora, Data.date(), "TEL", numero_tel, Ano, Remetente, Documento, Indice, Prioridade, Carater, Distribuicao, primeira_distribuicao, Redistribuicao, prim_redistribuicao, refdoc, Processos, Teor, Corpo, Resumo, Pais, pasta_pais, Instrucoes])
             TEL = [] 
     if geraExcel == 1:
-        gerarExcel(os.path.splitext(os.path.basename(filepath))[0], Dados)
+        gerarExcel(Dados)
     if geraCsv == 1:
-        gerarCsv(os.path.splitext(os.path.basename(filepath))[0], Dados)
+        gerarCsv(Dados)

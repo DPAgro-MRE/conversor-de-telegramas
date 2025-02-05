@@ -15,7 +15,7 @@ ctk.set_appearance_mode("dark")
 #Definição referente à base do aplicativo
 app.title("Leitor de Telegramas")
 app.geometry("925x649")
-app.resizable(False, False)
+#app.resizable(False, False)
 
 filename = ''
 filepath = ''
@@ -203,15 +203,20 @@ checkbox_csv.grid(pady=5)
 checkbox_csv.select()
 checkbox_csv.place(x=486, y=447)
 
+#Telegramas exclusivamente para a DPAgro
+checkbox_DPAgro = ctk.CTkCheckBox(app, text="Apenas telegramas dedicados a DPAgro", font=("Lato", 15, "normal"))
+checkbox_DPAgro.grid(pady=4)
+checkbox_DPAgro.select()
+checkbox_DPAgro.place(x=320, y=360)
 
-def safe_extraction(filepath, csv_flag, xlsx_flag):
+def safe_extraction(filepath, csv_flag, xlsx_flag, DPAgro_flag):
     try:
-        funcoes.Extracao(filepath, csv_flag, xlsx_flag)
+        funcoes.Extracao(filepath, csv_flag, xlsx_flag, DPAgro_flag)
         return message_success() 
     except Exception as e:
         return message_error()  
     
-button = ctk.CTkButton(app, text="Converter", width=183, height=44, font=('Lato', 24, "bold"), command=lambda: safe_extraction(filepath, checkbox_csv.get(), checkbox_xlsx.get()))
+button = ctk.CTkButton(app, text="Converter", width=183, height=44, font=('Lato', 24, "bold"), command=lambda: safe_extraction(filepath, checkbox_csv.get(), checkbox_xlsx.get(), checkbox_DPAgro.get()))
 button.grid(row=0, column=0, padx=50, pady=50)
 button.place(x=367, y=515)
 
