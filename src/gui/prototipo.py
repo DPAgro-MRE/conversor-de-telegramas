@@ -2,6 +2,8 @@ from tkinter import *
 from tkinter import filedialog
 from openpyxl import Workbook
 from openpyxl.styles import Font
+from openpyxl.worksheet.table import Table, TableStyleInfo
+from openpyxl.styles import Font
 import os
 import re
 import pytz
@@ -29,15 +31,50 @@ def gerarExcel(dados):
         workbook = Workbook()
         planilha = workbook.active
         planilha.title = "Coleção"
-        planilha.append(["data_hora_entrada", "data_documento", "tipo_documento", "numero", "ano", "remetente", "documento", "indice", "prioridade", "carater", "distribuicao", "primdistribuicao", "redistribuicao", "primredistribuicao", "refdoc", "processos_sei", "teor", "corpo", "resumo", "paises_ois", "pasta", "apenas_cumpre_instrucoes"])
+        cabecalhos = ["data_hora_entrada", "data_documento", "tipo_documento", "numero", "ano", "remetente", "documento", "indice", "prioridade", "carater", "distribuicao", "primdistribuicao", "redistribuicao", "primredistribuicao", "refdoc", "processos_sei", "teor", "corpo", "resumo", "paises_ois", "pasta", "apenas_cumpre_instrucoes"]
+
+        planilha.append(cabecalhos)
         for linha in dados:
             planilha.append(linha)
+
+        ref = f"A1:{chr(64 +len(cabecalhos))}{len(dados)+ 1}"  
+        tabela = Table(displayName="COLECAO", ref=ref)
+
+        estilo = TableStyleInfo(
+            name="TableStyleMedium9",
+            showFirstColumn=False,
+            showLastColumn=False,
+            showRowStripes=False,
+            showColumnStripes=False
+        )
+
+        tabela.tableStyleInfo = estilo
+        planilha.add_table(tabela)
+
         for row in planilha.iter_rows(min_row=2, max_row=planilha.max_row, max_col=planilha.max_column):
             # Se encontrar "Reservado" em alguma célula da linha
             if any(cell.value == "Reservado" for cell in row):
                 # Aplica a fonte vermelha para todas as células da linha
                 for cell in row:
-                    cell.font = Font(color="FF0000")
+                    if cell.value == "Reservado":
+                        cell.font = Font(color="FF0000")
+        colunas_limitadas = ["indice", "teor", "resumo", "refdoc", "corpo"]
+        for col in planilha.columns:
+            max_lenght = 0
+            col_letter = col[0].column_letter
+            col_name = col[0].value
+            """
+            for cell in col:
+                if cell.value:
+                    cell_lenght = len(str(cell.value))
+                    max_lenght = max(max_lenght, cell_lenght)
+            """
+            max_lenght = max((len(str(cell.value)) if cell.value else 0) for cell in col)
+            if col_name in colunas_limitadas:
+                planilha.column_dimensions[col_letter].width = min(28, max_lenght+2)            
+            else:
+                planilha.column_dimensions[col_letter].width = max_lenght + 2
+
         workbook.save(caminho_arquivo)
         print(f"Arquivo Excel criado em: {caminho_arquivo}")
     except Exception as e:
