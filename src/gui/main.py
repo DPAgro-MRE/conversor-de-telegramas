@@ -195,13 +195,13 @@ format_title.place(x=273, y=397)
 checkbox_xlsx = ctk.CTkCheckBox(app, text=".xlsx", command=ensure_one_selected, font=("Lato", 15, "normal"))
 checkbox_xlsx.grid(pady=5)
 checkbox_xlsx.select()
-checkbox_xlsx.place(x=347, y=447)
+checkbox_xlsx.place(x=347, y=437)
 
 #CSV
 checkbox_csv = ctk.CTkCheckBox(app, text=".csv",command=ensure_one_selected, font=("Lato", 15, "normal"))
 checkbox_csv.grid(pady=5)
 checkbox_csv.select()
-checkbox_csv.place(x=486, y=447)
+checkbox_csv.place(x=486, y=437)
 
 #Telegramas exclusivamente para a DPAgro
 checkbox_DPAgro = ctk.CTkCheckBox(app, text="Apenas telegramas dedicados a DPAgro", font=("Lato", 15, "normal"))
@@ -209,14 +209,19 @@ checkbox_DPAgro.grid(pady=4)
 checkbox_DPAgro.select()
 checkbox_DPAgro.place(x=320, y=360)
 
-def safe_extraction(filepath, csv_flag, xlsx_flag, DPAgro_flag):
+#Gerar Txt dos telegramas reservados
+checkbox_Reservado = ctk.CTkCheckBox(app, text="Gerar .txt para o corpo dos reservados", font=("Lato", 15, "normal"))
+checkbox_Reservado.grid(pady=4)
+checkbox_Reservado.place(x=320, y=475)
+
+def safe_extraction(filepath, csv_flag, xlsx_flag, DPAgro_flag, Reservado_flag):
     try:
-        funcoes.Extracao(filepath, csv_flag, xlsx_flag, DPAgro_flag)
+        funcoes.Extracao(filepath, csv_flag, xlsx_flag, DPAgro_flag, Reservado_flag)
         return message_success() 
     except Exception as e:
         return message_error()  
     
-button = ctk.CTkButton(app, text="Converter", width=183, height=44, font=('Lato', 24, "bold"), command=lambda: safe_extraction(filepath, checkbox_csv.get(), checkbox_xlsx.get(), checkbox_DPAgro.get()))
+button = ctk.CTkButton(app, text="Converter", width=183, height=44, font=('Lato', 24, "bold"), command=lambda: safe_extraction(filepath, checkbox_csv.get(), checkbox_xlsx.get(), checkbox_DPAgro.get(), checkbox_Reservado.get()))
 button.grid(row=0, column=0, padx=50, pady=50)
 button.place(x=367, y=515)
 
