@@ -58,16 +58,22 @@ def gerarExcel(dados):
                 for cell in row:
                     if cell.value == "Reservado":
                         cell.font = Font(color="FF0000")
-
+        colunas_limitadas = ["indice", "teor", "resumo", "refdoc", "corpo"]
         for col in planilha.columns:
             max_lenght = 0
             col_letter = col[0].column_letter
+            col_name = col[0].value
+            """
             for cell in col:
                 if cell.value:
                     cell_lenght = len(str(cell.value))
                     max_lenght = max(max_lenght, cell_lenght)
-
-            planilha.column_dimensions[col_letter].width = max_lenght + 2
+            """
+            max_lenght = max((len(str(cell.value)) if cell.value else 0) for cell in col)
+            if col_name in colunas_limitadas:
+                planilha.column_dimensions[col_letter].width = min(28, max_lenght+2)            
+            else:
+                planilha.column_dimensions[col_letter].width = max_lenght + 2
 
         workbook.save(caminho_arquivo)
         print(f"Arquivo Excel criado em: {caminho_arquivo}")
