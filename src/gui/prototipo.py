@@ -170,7 +170,7 @@ def Extracao(filepath, geraCsv, geraExcel, DPAgro, Reservado):
                 Indice = (re.findall('//([\s\S]*?)//', TEL))[0].replace("\n", " ").lstrip() #Procura o índice onde houver duas barras seguidas no telegrama, delimitando o início e fim.
                 Carater = match_carater.group(1) 
                 Prioridade = match_prioridade.group(1) 
-                primeira_distribuicao = "DPAGRO"
+                primeira_distribuicao = match_distribuicao.group(1).split("/")[0]
 
                 data_e_hora = f"{data_recebimento[6:] + '-' + data_recebimento[3:5] + '-' + data_recebimento[:2]}T{hora_entrada}Z" #Coloca a data no formato aceito pelo fluxo do Power Automate.
                 Data = datetime.strptime(data_expedicao, "%d/%m/%Y") 
@@ -234,11 +234,13 @@ def Extracao(filepath, geraCsv, geraExcel, DPAgro, Reservado):
                 #Se a checkbox "DPAgro" estiver marcada, apenas telegramas com primeira distribuição sendo da DPAgro serão adicionados.
                 if DPAgro == 1 and (match_distribuicao.group(1).lower().startswith("dpagro") or Redistribuicao.lower().startswith("dpagro")):
                     if Carater == 'Reservado' and Reservado == 1:
-                        gerarTxt(Corpo, numero_tel, Remetente)
+                        Corpo2 = "DATA: " + data_expedicao + "\nÍNDICE: " + Indice + "\n" + Corpo
+                        gerarTxt(Corpo2, numero_tel, Remetente)
                     Dados.append([data_e_hora, Data.date(), "TEL", numero_tel, Ano, Remetente, Documento, Indice, Prioridade, Carater, Distribuicao, primeira_distribuicao, Redistribuicao, prim_redistribuicao, refdoc, Processos, Teor, Corpo, Resumo, Pais, pasta_pais, Instrucoes])
                 elif DPAgro == 0:
                     if Carater == 'Reservado' and Reservado == 1:
-                        gerarTxt(Corpo, numero_tel, Remetente)
+                        Corpo2 = "DATA: " + data_expedicao + "\nÍNDICE: " + Indice + "\n" + Corpo
+                        gerarTxt(Corpo2, numero_tel, Remetente)
                     Dados.append([data_e_hora, Data.date(), "TEL", numero_tel, Ano, Remetente, Documento, Indice, Prioridade, Carater, Distribuicao, primeira_distribuicao, Redistribuicao, prim_redistribuicao, refdoc, Processos, Teor, Corpo, Resumo, Pais, pasta_pais, Instrucoes])
             TEL = [] 
     if geraExcel == 1:
