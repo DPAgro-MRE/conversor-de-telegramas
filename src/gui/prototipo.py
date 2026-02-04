@@ -103,6 +103,18 @@ def Extracao(filepath, geraCsv, geraExcel, DPAgro, Reservado):
     
     dicioPasta = {'Afeganistão': 'afeganistao', 'África do Sul': 'africa_do_sul', 'aladi': 'aladi', 'Albânia': 'albania', 'Alemanha': 'alemanha', 'Andorra': 'andorra', 'Angola': 'angola', 'ANGUILA': 'anguila', 'Antígua e Barbuda': 'antigua_e_barbuda', 'Arábia Saudita': 'arabia_saudita', 'Argélia': 'argelia', 'Argentina': 'argentina', 'Armênia': 'armenia', 'Aruba': 'aruba', 'Austrália': 'australia', 'Áustria': 'austria', 'Azerbaijão': 'azerbaijao', 'Bahamas': 'bahamas', 'Bahrein': 'bahrein', 'Bangladesh': 'bangladesh', 'Barbados': 'barbados', 'Belarus': 'belarus', 'Bélgica': 'belgica', 'Belize': 'belize', 'Benin': 'benin', 'BERMUDA': 'bermuda', 'Bolívia': 'bolivia', 'BONAIRE, SINT EUSTATIUS E SABA': 'bonaire_sint_eustatius_e_saba', 'Bósnia e Herzegovina': 'bosnia_e_herzegovina', 'Botsuana': 'botsuana', 'Brunei': 'brunei', 'Bulgária': 'bulgaria', 'Burkina Faso': 'burkina_faso', 'Burundi': 'burundi', 'Butão': 'butao', 'Cabo Verde': 'cabo_verde', 'Camboja': 'camboja', 'Cameroun (Camarões)': 'cameroun_camaroes', 'Canadá': 'canada', 'CARICOM': 'varios_paises', 'Catar': 'catar', 'Cazaquistão': 'cazaquistao', 'CDB': 'cdb', 'CEEA': 'ceea', 'CFC/FCPB': 'cfcfcpb', 'Chade': 'chade', 'Chile': 'chile', 'China': 'china', 'Chipre': 'chipre', 'CIPV': 'cipv', 'Codex Alimentarius': 'codex_alimentarius', 'COI': 'coi', 'Colômbia': 'colombia', 'Comores': 'comores', 'Congo': 'congo', 'Coreia do Norte': 'coreia_do_norte', 'Coreia do Sul': 'coreia_do_sul', 'Costa Rica': 'costa_rica', "Côte D'Ivoire (Costa do Marfim)": 'cote_divoire_costa_do_marfim', 'cplp': 'cplp', 'Croácia': 'croacia', 'Cuba': 'cuba', 'CURAÇAO': 'curacao', 'Dinamarca': 'dinamarca', 'Djibouti (Djibuti)': 'djibouti_djibuti', 'Dominica': 'dominica', 'Egito': 'egito', 'El Salvador': 'el_salvador', 'Emirados Árabes': 'emirados_arabes', 'Equador': 'equador', 'Eritreia': 'eritreia', 'Eslováquia': 'eslovaquia', 'Eslovênia': 'eslovenia', 'Espanha': 'espanha', 'Estados Unidos': 'estados_unidos', 'Estônia': 'estonia', 'Etiópia': 'etiopia', 'FAO': 'fao', 'Fiji': 'fiji', 'Filipinas': 'filipinas', 'Finlândia': 'finlandia', 'França': 'franca', 'Gabão': 'gabao', 'Gâmbia': 'gambia', 'Gana': 'gana', 'Geórgia': 'georgia', 'GEÓRGIA DO SUL E AS ILHAS SANDWICH': 'georgia_do_sul_e_as_ilhas_sandwich', 'GIBRALTAR': 'gibraltar', 'Granada': 'granada', 'Grécia': 'grecia', 'GROENLÂNDIA': 'groenlandia', 'GUADALUPE': 'guadalupe', 'GUAM': 'guam', 'Guatemala': 'guatemala', 'GUERNSEY': 'guernsey', 'Guiana': 'guiana', 'GUIANA FRANCESA': 'guiana_francesa', 'Guiné Equatorial': 'guine_equatorial', 'Guiné-Bissau': 'guinebissau', 'Guiné-Conacri': 'guineconacri', 'Haiti': 'haiti', 'Honduras': 'honduras', 'Hong Kong': 'hong_kong', 'Hungria': 'hungria', 'ICAC': 'icac', 'Iêmen': 'iemen', 'ILHA DE BOUVET': 'ilha_de_bouvet', 'ILHA DE MAN': 'ilha_de_man', 'ILHA DO NATAL': 'ilha_do_natal', 'ILHA NORFOLK': 'ilha_norfolk', 'ILHAS CAYMAN': 'ilhas_cayman', 'ILHAS COCOS': 'ilhas_cocos', 'ILHAS COOK': 'ilhas_cook', 'ILHAS DE ÅLAND': 'ilhas_de_åland', 'ILHAS FAROE': 'ilhas_faroe', 'ILHAS HEARD E ILHAS McDONALD': 'ilhas_heard_e_ilhas_mcdonald', 'ILHAS MALVINAS (FALKLAND)': 'ilhas_malvinas_falkland', 'ILHAS MARIANAS DO NORTE': 'ilhas_marianas_do_norte', 'Ilhas Marshall': 'ilhas_marshall', 'ILHAS OUTONARES MENORES DOS ESTADOS UNIDOS': 'ilhas_outonares_menores_dos_estados_unidos', 'Ilhas Salomão': 'ilhas_salomao', 'ILHAS VIRGENS (BRITÂNICAS)': 'ilhas_virgens_britanicas', 'ILHAS VIRGENS (EUA)': 'ilhas_virgens_eua', 'Índia': 'india', 'Indonésia': 'indonesia', 'Irã': 'ira', 'Iraque': 'iraque', 'Irlanda': 'irlanda', 'Islândia': 'islandia', 'Israel': 'israel', 'Itália': 'italia', 'Jamaica': 'jamaica', 'Japão': 'japao', 'JERSEY': 'jersey', 'Jordânia': 'jordania', 'Kiribati': 'kiribati', 'Kuaite (Kuwait)': 'kuaite_kuwait', 'Laos': 'laos', 'Lesoto': 'lesoto', 'Letônia': 'letonia', 'Líbano': 'libano', 'Libéria': 'liberia', 'Líbia': 'libia', 'Liechtenstein': 'liechtenstein', 'Lituânia': 'lituania', 'Luxemburgo': 'luxemburgo', 'MACAU': 'macau', 'Macedônia do Norte': 'macedonia_do_norte', 'Madagascar': 'madagascar', 'Malásia': 'malasia', 'Malauí (Malawi)': 'malaui_malawi', 'Maldivas': 'maldivas', 'Mali': 'mali', 'Malta': 'malta', 'Marrocos': 'marrocos', 'MARTINICA': 'martinica', 'Maurício': 'mauricio', 'Mauritânia': 'mauritania', 'MAYOTTE': 'mayotte', 'MERCOSUL': 'mercosul', 'México': 'mexico', 'Mianmar (Myanmar)': 'mianmar_myanmar', 'Micronésia': 'micronesia', 'Moçambique': 'mocambique', 'Moldova (Moldávia)': 'moldova_moldavia', 'Mônaco': 'monaco', 'Mongólia': 'mongolia', 'Montenegro': 'montenegro', 'MONTSERRAT': 'montserrat', 'Namíbia': 'namibia', 'Nauru': 'nauru', 'Nepal': 'nepal', 'Nicarágua': 'nicaragua', 'Níger': 'niger', 'Nigéria': 'nigeria', 'NIUE': 'niue', 'Noruega': 'noruega', 'NOVA CALEDÔNIA': 'nova_caledonia', 'Nova Zelândia': 'nova_zelandia', 'OCDE': 'ocde', 'OEA': 'oea', 'OIAçúcar': 'oiacucar', 'OICacau/ICCO': 'oicacauicco', 'OICafé': 'oicafe', 'OIE': 'oie', 'OIV': 'oiv', 'Omã': 'oma', 'OMC': 'omc', 'OMS': 'oms', 'ONU': 'onu', 'Países Baixos': 'paises_baixos', 'Palau': 'palau', 'Palestina': 'palestina', 'Panamá': 'panama', 'Papua Nova Guiné': 'papua_nova_guine', 'Paquistão': 'paquistao', 'Paraguai': 'paraguai', 'Peru': 'peru', 'PITCAIRN': 'pitcairn', 'POLINÉSIA FRANCESA': 'polinesia_francesa', 'Polônia': 'polonia', 'PORTO RICO': 'porto_rico', 'Portugal': 'portugal', 'Quênia': 'quenia', 'Quirguistão': 'quirguistao', 'Reino Unido': 'reino_unido', 'Rep. Centro-Africana': 'rep_centroafricana', 'Rep. Dem. do Congo': 'rep_dem_do_congo', 'República Dominicana': 'republica_dominicana', 'República Tcheca': 'republica_tcheca', 'RÉUNION': 'reunion', 'Romênia': 'romenia', 'Ruanda': 'ruanda', 'Rússia': 'russia', 'SAARA OCIDENTAL': 'saara_ocidental', 'SAINT BARTHÉLEMY': 'saint_barthelemy', 'SAINT HELENA, ASCENSION E TRISTAN DA CUNHA': 'saint_helena_ascension_e_tristan_da_cunha', 'Samoa': 'samoa', 'SAMOA AMERICANA': 'samoa_americana', 'San Marino': 'san_marino', 'Santa Lúcia': 'santa_lucia', 'Santa Sé (Vaticano)': 'santa_se_vaticano', 'São Cristóvão e Névis': 'sao_cristovao_e_nevis', 'SÃO MARTINHO (PARTE FRANCESA)': 'sao_martinho_parte_francesa', 'SÃO PIERRE E MIQUELON': 'sao_pierre_e_miquelon', 'São Tomé e Principe': 'sao_tome_e_principe', 'São Vicente e Granadinas': 'sao_vicente_e_granadinas', 'Seichelles (Seychelles)': 'seichelles_seychelles', 'Senegal': 'senegal', 'Serra Leoa': 'serra_leoa', 'Sérvia': 'servia', 'Singapura (Cingapura)': 'singapura_cingapura', 'SINT MAARTEN (PARTE HOLANDESA)': 'sint_maarten_parte_holandesa', 'Síria': 'siria', 'Somália': 'somalia', 'Sri Lanka': 'sri_lanka', 'Suazilândia': 'suazilandia', 'Sudão': 'sudao', 'Sudão do Sul': 'sudao_do_sul', 'Suécia': 'suecia', 'Suíça': 'suica', 'Suriname': 'suriname', 'SVALBARD E JAN MAYEN': 'svalbard_e_jan_mayen', 'Tadjiquistão': 'tadjiquistao', 'Tailândia': 'tailandia', 'Taiwan': 'taiwan', 'Tanzânia': 'tanzania', 'TERRITÓRIO OCEANO BRITÂNICO (THE)': 'territorio_oceano_britanico_the', 'TERRITÓRIOS DO SUL FRANCÊS': 'territorios_do_sul_frances', 'Timor-Leste (Timor Leste)': 'timorleste_timor_leste', 'Togo': 'togo', 'TOKELAU': 'tokelau', 'Tonga': 'tonga', 'Trinidad e Tobago': 'trinidad_e_tobago', 'Tunísia': 'tunisia', 'Turcomenistão': 'turcomenistao', 'TURKS E CAICOS ISLANDS': 'turks_e_caicos_islands', 'Turquia': 'turquia', 'Tuvalu': 'tuvalu', 'Ucrânia': 'ucrania', 'Uganda': 'uganda', 'União Europeia': 'uniao_europeia', 'Uruguai': 'uruguai', 'Uzbequistão': 'uzbequistao', 'Vanuatu': 'vanuatu', 'VÁRIOS PAÍSES': 'varios_paises', 'Venezuela': 'venezuela', 'Vietnã': 'vietna', 'WALLIS E FUTUNA': 'wallis_e_futuna', 'Zâmbia': 'zambia', 'Zimbábue': 'zimbabue'}
     # ^ Dicionário com os países que aparecem no índice dos telegramas, mas com este tendo a Key como nome do país, e o Value a pasta em que o telegrama ficará armazenado.
+    
+    retransmitido = {'BRASEUROPA': f'Retransmito teor de comunicação do Embaixador do Brasil junto à União Europeia, recebida em',
+    'REBRASFAO': f'Retransmito teor de comunicação da Representação Permanente do Brasil junto a FAO, recebida em',
+    'CONSBRAS': f'Retransmito teor de comunicação do Consulado-Geral do Brasil em Hong Kong, recebida em',
+    'REBRASLON': f'Retransmito teor de comunicação do representante Permanente do Brasil junto aos Organismos Internacionais sediados em Londres, recebida em',
+    'DELBRASOMC': f'Retransmito teor de comunicação do Representante Permanente do Brasil junto à OMC e outras organizações econômicas em Genebra, recebida em',
+    'DELBRASPAR': f'Retransmito teor de comunicação da Delegação do Brasil junto às organizações internacionais econômicas sediadas em Paris , recebida em',
+    'DELBRASONU': f'Retransmito teor de comunicação do Representante Permanente junto às Nações Unidas, recebida em',
+    'DELBRASAIEA': f'Encaminho teor de comunicação da Embaixadora Representante Permanente junto à AIEA e Organismos Internacionais Conexos do Brasil em Viena, recebida em:',
+    'BRASALADI': f'Retransmito teor de comunicação da Delegação Permanente do Brasil junto à ALADI e ao MERCOSUL, recebida em:',
+    'DELBRASGEN': f'Retransmito teor de comunicação do representante Permanente do Brasil  junto à Organização das Nações Unidas e demais Organismos Internacionais em Genebra, recebida em',
+    'DELBRASUPA': f'Retransmito teor de comunicação do representante Permanente do Brasil  junto à OEA, recebida em'}
 
     TELsValidos = [] #Lista com as páginas ordenadas dos telegramas de caráter Ostensivo e Reservado, desconsiderando os Secretos.
 
@@ -145,29 +157,30 @@ def Extracao(filepath, geraCsv, geraExcel, DPAgro, Reservado):
                 hora_entrada = match_numero_tel.group(2) 
                 numero_tel = int(match_numero_tel.group(3))
 
+                match_indexacao = re.search(r'DESCR=([^\s]+)', '\n'.join(TEL))
+                if match_indexacao:
+                    Indexacao = match_indexacao.group(1).split('-')
                 #Remove o cabeçalho de cada página para extrair o conteúdo.
                 for i in range(len(TEL)):
                     TEL[i] = TEL[i].splitlines()
                     TEL[i] = TEL[i][3:-1]
                     TEL[i] = "\n".join(TEL[i])
                 TEL = '\n'.join(TEL)
+                Redistribuicao = "NA"
+                prim_redistribuicao = "NA"
                 match_distribuicao = re.search(r'DISTR=(.*)', TEL)
                 match_redistribuicao = re.search(r"Redistribuído para\s*(.*?)\s* em \d{2}/\d{2}/\d{4}", TEL) 
                 if match_redistribuicao:
                     Redistribuicao = match_redistribuicao.group(1) 
                     prim_redistribuicao = Redistribuicao.split("/")[0] 
-                else:
-                    Redistribuicao = "NA"
-                    prim_redistribuicao = "NA"
 
                 Distribuicao = match_distribuicao.group(1) 
                 match_remetente_e_data = re.search(r"De (.*?) para Exteriores em (\d{2}/\d{2}/\d{4})", TEL)
                 Remetente = match_remetente_e_data.group(1)
                 data_expedicao = match_remetente_e_data.group(2)
-
                 match_prioridade = re.search(r'PRIOR=([\wÀ-ÿ]+)', TEL)
                 match_carater = re.search(r'CARAT=([A-Za-z]+)', TEL)
-                Indice = (re.findall('//([\s\S]*?)//', TEL))[0].replace("\n", " ").lstrip() #Procura o índice onde houver duas barras seguidas no telegrama, delimitando o início e fim.
+                Indice = (re.findall('//([\s\S]*?)//', TEL))[0].replace("\n", " ").lstrip().rstrip() #Procura o índice onde houver duas barras seguidas no telegrama, delimitando o início e fim.
                 Carater = match_carater.group(1) 
                 Prioridade = match_prioridade.group(1) 
                 primeira_distribuicao = match_distribuicao.group(1).split("/")[0]
@@ -193,12 +206,12 @@ def Extracao(filepath, geraCsv, geraExcel, DPAgro, Reservado):
                                 pasta_pais = dicioPasta[nome_país]
                                 continua = False
                 
+                Resumo = "NA"
                 match_resumo = re.search(r'RESUMO=\n(.*?)(\n\s*\n)', TEL, re.DOTALL) #Procura o conteúdo que estiver depois de "RESUMO=" até achar uma quebra de linha vazia.
                 if match_resumo:
                     Resumo = match_resumo.group(1).split('\n')
                     Resumo = " ".join(Resumo)
-                else:
-                    Resumo = "NA"
+
                 Teor = TEL
                 Teor = re.sub(r'(\n\s*){2,}', '\n\n', Teor)
                 match_corpo = re.search(r'(Nr\.\s\d+\s)(.*)', Teor, re.DOTALL) #Extrai todo o texto após o número do telegrama 
@@ -209,37 +222,38 @@ def Extracao(filepath, geraCsv, geraExcel, DPAgro, Reservado):
                 Teor = re.sub(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]', '', Teor) #Remove caracteres invisíveis, que resultariam em problema na geração do .xlsx.
                 Corpo = re.sub(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]', '', Corpo) #Remove caracteres invisíveis, que resultariam em problema na geração do .xlsx.
                 Corpo = re.sub(r'(?<=[\w.,;!?])\n(?=[^\n])', ' ', Corpo)
-            
+
+                Instrucoes = "Não"
                 match_instrucoes = re.search(r"(cumpre |cumpri |cumpro )(instrução|instruções)", TEL, re.IGNORECASE)
                 if match_instrucoes:
                     Instrucoes = "Sim"
-                else:
-                    Instrucoes = "Não"
 
+                refdoc = "NA"
                 match_ref_doc = re.search(r'REF/ADIT=(.*)', TEL)
                 if match_ref_doc:
                     refdoc = re.sub(r'(TEL [0-9]+|DET [0-9]+) ([0-9]{4})', r'\1/\2/<posto>', match_ref_doc.group(1))
                     refdoc = re.sub(r'(TEL [0-9]+|DET [0-9]+),', r'\1/<ano>/<posto>,', refdoc)
                     refdoc = re.sub(r'(TEL [0-9]+|DET [0-9]+)$', r'\1/<ano>/<posto>', refdoc)
                     refdoc = refdoc.replace('<ano>', str(Ano)).replace('<posto>', Remetente)
-                else:
-                    refdoc = "NA"
-
+                
+                Processos = "NA"
                 match_processos = re.search(r"(\d{5}\.\d{6}/\d{4}-\d{2})", TEL)
                 if match_processos:
                     Processos = match_processos.group(0)
-                else:
-                    Processos = "NA"
+                
+                retransmissao = r"Encaminho teor de comunicação do {cargo} do Brasil em {localidade}, recebida em"
+                if Remetente in retransmitido:
+                    retransmissao = retransmitido[Remetente]
                 #Adiciona todos os dados obtidos à lista Dados, que posteriormente será utilizada para gerar os arquivos .xlsx e .csv. 
                 #Se a checkbox "DPAgro" estiver marcada, apenas telegramas com primeira distribuição sendo da DPAgro serão adicionados.
                 if DPAgro == 1 and (match_distribuicao.group(1).lower().startswith("dpagro") or Redistribuicao.lower().startswith("dpagro")):
                     if Carater == 'Reservado' and Reservado == 1:
-                        Corpo2 = "DATA: " + data_expedicao + "\nÍNDICE: " + Indice + "\n" + Corpo
+                        Corpo2 = "DATA: " + data_expedicao + "\nINDEXAÇÃO: " + '-'.join(Indexacao) + "\n(Assunto: " + Indice + ")\n" + f"\n{retransmissao} {data_expedicao}:\n" + f"[ABRE ASPAS]\n{Corpo}\n[FECHA ASPAS]"
                         gerarTxt(Corpo2, numero_tel, Remetente)
                     Dados.append([data_e_hora, Data.date(), "TEL", numero_tel, Ano, Remetente, Documento, Indice, Prioridade, Carater, Distribuicao, primeira_distribuicao, Redistribuicao, prim_redistribuicao, refdoc, Processos, Teor, Corpo, Resumo, Pais, pasta_pais, Instrucoes])
                 elif DPAgro == 0:
                     if Carater == 'Reservado' and Reservado == 1:
-                        Corpo2 = "DATA: " + data_expedicao + "\nÍNDICE: " + Indice + "\n" + Corpo
+                        Corpo2 = "DATA: " + data_expedicao + "\nINDEXAÇÃO: " + '-'.join(Indexacao) + "\n(Assunto: " + Indice + ")\n" + f"\n{retransmissao} {data_expedicao}:\n" + f"[ABRE ASPAS]\n{Corpo}\n[FECHA ASPAS]"
                         gerarTxt(Corpo2, numero_tel, Remetente)
                     Dados.append([data_e_hora, Data.date(), "TEL", numero_tel, Ano, Remetente, Documento, Indice, Prioridade, Carater, Distribuicao, primeira_distribuicao, Redistribuicao, prim_redistribuicao, refdoc, Processos, Teor, Corpo, Resumo, Pais, pasta_pais, Instrucoes])
             TEL = [] 
